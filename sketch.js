@@ -3,7 +3,7 @@
 
 // Global var
 var tileCount, actRandomSeed, actStrokeCap;
- 
+
 function setup() {
   // Canvas setup
   canvas = createCanvas(windowWidth, windowHeight);
@@ -16,7 +16,7 @@ function setup() {
   // Init Var
   tileCount = 20;
   actRandomSeed = 0;
-  actStrokeCap = ROUND; 
+  actStrokeCap = ROUND;
 }
 
 function draw() {

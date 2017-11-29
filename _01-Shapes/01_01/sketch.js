@@ -3,7 +3,7 @@
 
 // Global var
 var b = 255, p = false;
- 
+
 function setup() {
   // Canvas setup
   canvas = createCanvas(windowWidth, windowHeight);
@@ -56,7 +56,7 @@ function mouseReleased() {
 
 function keyPressed() {
   // Clear sketch
-  if (keyCode === 32) background(255) // 32 = SPACE BAR 
+  if (keyCode === 32) background(255) // 32 = SPACE BAR
   if (key == 's' || key == 'S') saveThumb(650, 350);
 }
 
