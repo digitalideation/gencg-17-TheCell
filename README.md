@@ -35,3 +35,4 @@ All examples should be placed in the corresponding **collection** folder. To cre
 All the info regarding the class as well as direct links to all materials (slides, notebooks, examples, etc... ) are accessible via the github pages for this repository:
 
 **[https://digitalideation.github.io/BA_222_GENCG_H1701/](https://digitalideation.github.io/BA_222_GENCG_H1701/)**
+**[https://digitalideation.github.io/gencg-17-TheCell/](https://digitalideation.github.io/gencg-17-TheCell/)**
