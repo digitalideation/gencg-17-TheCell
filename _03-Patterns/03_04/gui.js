@@ -1,8 +1,9 @@
 let options = {
-	squareLength: 50,
-	squareWidth: 50,
+	squareLength: 20,
+	squareWidth: 20,
 	rotationDegree: 45,
-	numberOfSquares: 10,
+	numberOfSquares: 30,
+	influneceWidthPercent: 40,
 	squareFillColor: [0, 0, 0], //RGB
 	backgroundColor: [70, 165, 125], //RGB
 };
@@ -19,6 +20,7 @@ window.onload = function()
 	controllers.push(window.gui.add(options, 'squareWidth').min(1).max(200).step(1));
 	controllers.push(window.gui.add(options, 'numberOfSquares').min(1).max(100).step(1));
 	controllers.push(window.gui.add(options, 'rotationDegree').min(0).max(360).step(1));
+	controllers.push(window.gui.add(options, 'influneceWidthPercent').min(0).max(100).step(1));
 	controllers.push(window.gui.addColor(options, 'squareFillColor'));
 	controllers.push(window.gui.addColor(options, 'backgroundColor'));
 

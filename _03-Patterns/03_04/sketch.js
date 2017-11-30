@@ -28,23 +28,61 @@ function draw()
 	if (window.somethingChanged)
 	{
 		background(options.backgroundColor);
-		/*
-		let verticalAmount = windowHeight / options.squareWidth;
-		for (let i = 0; i < verticalAmount; i++)
-		{
-			drawRectLine(0, options.squareWidth * i + 10 * i, windowWidth);
-		}
-		*/
+
 		let xStepSize = windowWidth / options.numberOfSquares;
 		let yStepSize = windowHeight / options.numberOfSquares;
+		let influenceWidth = options.influneceWidthPercent / 100 * windowWidth;
+		let leftBorderXPosRelativeToMouse = mouseX - influenceWidth / 2;
+		let rightBorderXPosRelativeToMouse = mouseX + influenceWidth / 2;
+		let localDegree = 0;
 
 		for (let y = 0; y < options.numberOfSquares + 1; y++)
 		{
 			for (let x = 0; x < options.numberOfSquares + 1; x++)
 			{
-				let startPoint = createVector(x * xStepSize - (options.squareLength / 2), y * yStepSize - (options.squareWidth / 2));
-				let endPoint = createVector(x * xStepSize + (options.squareLength / 2), y * yStepSize + (options.squareWidth / 2));
-				drawRectWithAngle(startPoint, endPoint, options.rotationDegree);
+				let startPoint = createVector(
+					x * xStepSize - (options.squareLength / 2),
+					y * yStepSize - (options.squareWidth / 2)
+				);
+				let endPoint = createVector(
+					x * xStepSize + (options.squareLength / 2),
+					y * yStepSize + (options.squareWidth / 2)
+				);
+
+				if (mouseInputMode == 3)
+				{
+
+					if (startPoint.x > leftBorderXPosRelativeToMouse
+							&& startPoint.x < rightBorderXPosRelativeToMouse)
+					{
+						if (startPoint.x < mouseX)
+						{
+							localDegree = options.rotationDegree - lerp(
+								0,
+								options.rotationDegree,
+								1 / (influenceWidth / 2) * (mouseX - startPoint.x)
+							)
+							drawRectWithAngle(startPoint, endPoint, localDegree);
+						}
+						else
+						{
+							localDegree = options.rotationDegree - lerp(
+								0,
+								options.rotationDegree,
+								1 / (influenceWidth / 2) * (startPoint.x - mouseX)
+							)
+							drawRectWithAngle(startPoint, endPoint, -localDegree);
+						}
+					}
+					else
+					{
+						drawRectWithAngle(startPoint, endPoint, 0);
+					}
+				}
+				else
+				{
+					drawRectWithAngle(startPoint, endPoint, options.rotationDegree);
+				}
 			}
 		}
 		window.somethingChanged = false;
@@ -60,6 +98,9 @@ function draw()
 		break;
 		case 2:
 			options.rotationDegree = lerp(0, 360, 1 / windowWidth * mouseX);
+			window.somethingChanged = true;
+		break;
+		case 3:
 			window.somethingChanged = true;
 		break;
 		default:
@@ -126,7 +167,7 @@ function keyPressed()
 	if (key == ' ')
 	{
 		mouseInputMode ++;
-		if (mouseInputMode > 2)
+		if (mouseInputMode > 3)
 		{
 			mouseInputMode = 0;
 		}
