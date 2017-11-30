@@ -1,6 +1,8 @@
 "use strict";
 
 // Global var
+let topLeft;
+let bottomRight;
 
 function setup()
 {
@@ -10,23 +12,25 @@ function setup()
 	// Detect screen density (retina)
 	var density = displayDensity();
 	pixelDensity(density);
-
-	let topLeft = createVector(50, 50);
-	let bottomRight = createVector(200, 200);
-
-	drawSquareOrRecurse(options.minimumSquareSizePx, topLeft, bottomRight);
+	topLeft = createVector(50, 50);
+	bottomRight = createVector(200, 200);
 }
 
 function draw()
 {
-
+	clear();
+	randomSeed(options.randomSeed);
+	drawSquareOrRecurse(options.minimumSquareSizePx, topLeft, bottomRight);
 }
 
-function drawSquareOrRecurse(minSquareSize, topLeftVec, bottomRightVec)
+function drawSquareOrRecurse(
+	minSquareSize,
+	topLeftVec,
+	bottomRightVec)
 {
-	if (topLeftVec.x - bottomRightVec.x < minSquareSize)
+	if (bottomRightVec.x - topLeftVec.x < minSquareSize)
 	{
-		stroke(options.squareFillColor);
+		stroke(options.squareLineColor);
 		fill(options.squareFillColor);
 		quad(
 			topLeftVec.x,
@@ -37,7 +41,88 @@ function drawSquareOrRecurse(minSquareSize, topLeftVec, bottomRightVec)
 			bottomRightVec.y,
 			topLeftVec.x,
 			bottomRightVec.y
+		);
+	}
+	else
+	{
+		if (random(0, 1) < options.randomThreshold)
+		{
+			// split into 4 subsquares
+			// top left
+			drawSquareOrRecurse(
+				minSquareSize,
+				topLeftVec,
+	 			createVector(
+					topLeftVec.x + Math.floor((bottomRightVec.x - topLeftVec.x) / 2),
+					topLeftVec.y + Math.floor((bottomRightVec.y - topLeftVec.y ) / 2)
+				)
 			);
+		}
+		else
+		{
+			drawSquareOrRecurse(
+				minSquareSize,
+				topLeftVec,
+	 			createVector(
+					topLeftVec.x + Math.floor((bottomRightVec.x - topLeftVec.x) / 2),
+					topLeftVec.y + Math.floor((bottomRightVec.y - topLeftVec.y ) / 2)
+				)
+			);
+		}
+		if (random(0, 1) < options.randomThreshold)
+		{
+			// top right
+			drawSquareOrRecurse(
+				minSquareSize,
+				createVector(
+					topLeftVec.x + Math.floor((bottomRightVec.x - topLeftVec.x) / 2),
+					topLeftVec.y
+				),
+				createVector(
+					bottomRightVec.x,
+					topLeftVec.y + Math.floor((bottomRightVec.y - topLeftVec.y) / 2)
+				)
+			);
+		}
+		else
+		{
+
+		}
+		if (random(0, 1) < options.randomThreshold)
+		{
+			// bottom right
+			drawSquareOrRecurse(
+				minSquareSize,
+				createVector(
+					topLeftVec.x + Math.floor((bottomRightVec.x - topLeftVec.x) / 2),
+					topLeftVec.y + Math.floor((bottomRightVec.y - topLeftVec.y) / 2)
+				),
+				bottomRightVec
+			);
+		}
+		else
+		{
+
+		}
+		if (random(0, 1) < options.randomThreshold)
+		{
+			// bottom left
+			drawSquareOrRecurse(
+				minSquareSize,
+				createVector(
+					topLeftVec.x,
+					topLeftVec.y + Math.floor((bottomRightVec.y - topLeftVec.y) / 2)
+				),
+				createVector(
+					topLeftVec.x + Math.floor((bottomRightVec.x - topLeftVec.x) / 2),
+					bottomRightVec.y
+				)
+			);
+		}
+		else
+		{
+
+		}
 	}
 }
 

@@ -1,8 +1,8 @@
 ---
 layout: sketch
-title: "title of the sketch" 
+title: "holes in the fabric" 
 category: "Experiment" 
-thumb_name: "thumb.jpg"
+thumb_name: "thumb.png"
 ---
 
 <!-- 
