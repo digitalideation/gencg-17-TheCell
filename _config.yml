@@ -14,6 +14,7 @@ github_username: yourname
 collections:
   01-Shapes:
     output: true
-    
   02-Agents:
+    output: true
+  03-Patterns:
     output: true
