@@ -66,7 +66,7 @@ function drawSquareOrRecurse(
 		}
 		else
 		{
-			if (random(0, 1) < options.randomThreshold)
+			if (random(0, 1) < 0.5)
 			{
 				stroke(options.squareLineColor);
 				fill(options.squareFillColor);
@@ -104,7 +104,7 @@ function drawSquareOrRecurse(
 		}
 		else
 		{
-			if (random(0, 1) < options.randomThreshold)
+			if (random(0, 1) < 0.5)
 			{
 				stroke(options.squareLineColor);
 				fill(options.squareFillColor);
@@ -141,7 +141,7 @@ function drawSquareOrRecurse(
 		}
 		else
 		{
-			if (random(0, 1) < options.randomThreshold)
+			if (random(0, 1) < 0.5)
 			{
 				stroke(options.squareLineColor);
 				fill(options.squareFillColor);
@@ -181,7 +181,7 @@ function drawSquareOrRecurse(
 		}
 		else
 		{
-			if (random(0, 1) < options.randomThreshold)
+			if (random(0, 1) < 0.5)
 			{
 				stroke(options.squareLineColor);
 				fill(options.squareFillColor);

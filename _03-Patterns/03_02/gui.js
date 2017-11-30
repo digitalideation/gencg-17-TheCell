@@ -16,7 +16,7 @@ window.onload = function()
   window.gui = new dat.GUI();
   controllers.push(window.gui.add(options, 'minimumSquareSizePx').min(1).max(100).step(1));
   controllers.push(window.gui.add(options, 'randomSeed').min(1).max(10000).step(1));
-  controllers.push(window.gui.add(options, 'randomThreshold').min(0.0).max(1).step(0.01));
+  controllers.push(window.gui.add(options, 'randomThreshold').min(0.0).max(1).step(0.001));
   controllers.push(window.gui.addColor(options, 'squareFillColor'));
   controllers.push(window.gui.addColor(options, 'squareLineColor'));
   controllers.push(window.gui.addColor(options, 'backgroundColor'));
