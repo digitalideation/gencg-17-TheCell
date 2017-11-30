@@ -8,13 +8,24 @@ let options = {
   size: 600,
 };
 
+window.somethingChanged = true;
+let controllers = [];
+
 window.onload = function()
 {
-  let gui = new dat.GUI();
-  gui.add(options, 'minimumSquareSizePx').min(1).max(100).step(1);
-  gui.add(options, 'randomSeed').min(1).max(10000).step(1);
-  gui.add(options, 'randomThreshold').min(0.0).max(1).step(0.01);
-  gui.addColor(options, 'squareFillColor');
-  gui.addColor(options, 'squareLineColor');
-  gui.addColor(options, 'backgroundColor');
+  window.gui = new dat.GUI();
+  controllers.push(window.gui.add(options, 'minimumSquareSizePx').min(1).max(100).step(1));
+  controllers.push(window.gui.add(options, 'randomSeed').min(1).max(10000).step(1));
+  controllers.push(window.gui.add(options, 'randomThreshold').min(0.0).max(1).step(0.01));
+  controllers.push(window.gui.addColor(options, 'squareFillColor'));
+  controllers.push(window.gui.addColor(options, 'squareLineColor'));
+  controllers.push(window.gui.addColor(options, 'backgroundColor'));
+
+  controllers.forEach( function(element, index, arr)
+  {
+    element.onChange( function (value)
+    {
+      window.somethingChanged = true;
+    });
+  });
 };

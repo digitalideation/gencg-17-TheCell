@@ -14,14 +14,19 @@ function setup()
 	pixelDensity(density);
 	topLeft = createVector(50, 50);
 	bottomRight = createVector(options.size, options.size);
+
 	background(options.backgroundColor);
 }
 
 function draw()
 {
-	background(options.backgroundColor);
-	randomSeed(options.randomSeed);
-	drawSquareOrRecurse(options.minimumSquareSizePx, topLeft, bottomRight);
+	if (window.somethingChanged)
+	{
+		background(options.backgroundColor);
+		randomSeed(options.randomSeed);
+		drawSquareOrRecurse(options.minimumSquareSizePx, topLeft, bottomRight);
+		window.somethingChanged = false;
+	}
 }
 
 function drawSquareOrRecurse(
