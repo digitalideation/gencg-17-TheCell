@@ -6,7 +6,7 @@ let bottomRight;
 let diagSize = Math.sqrt(
 		options.squareLength * options.squareLength
 		+ options.squareWidth * options.squareWidth)
-let mouseInputActive = true;
+let mouseInputMode = 1;
 
 function setup()
 {
@@ -44,18 +44,27 @@ function draw()
 			{
 				let startPoint = createVector(x * xStepSize - (options.squareLength / 2), y * yStepSize - (options.squareWidth / 2));
 				let endPoint = createVector(x * xStepSize + (options.squareLength / 2), y * yStepSize + (options.squareWidth / 2));
-				drawRectWithAngle(startPoint, endPoint, 45);
+				drawRectWithAngle(startPoint, endPoint, options.rotationDegree);
 			}
 		}
 		window.somethingChanged = false;
 	}
 
-	if (mouseInputActive)
+	switch (mouseInputMode)
 	{
-		options.squareLength = lerp(0, windowWidth / (options.numberOfSquares - 3), 1 / windowWidth * mouseX);
-		options.squareWidth = lerp(0, windowHeight / (options.numberOfSquares - 3), 1 / windowHeight * mouseY);
-		//options.numberOfSquares = lerp(0, 100);
-		window.somethingChanged = true;
+		case 1:
+			options.squareLength = lerp(0, windowWidth / (options.numberOfSquares - 3), 1 / windowWidth * mouseX);
+			options.squareWidth = lerp(0, windowHeight / (options.numberOfSquares - 3), 1 / windowHeight * mouseY);
+			//options.numberOfSquares = lerp(0, 100);
+			window.somethingChanged = true;
+		break;
+		case 2:
+			options.rotationDegree = lerp(0, 360, 1 / windowWidth * mouseX);
+			window.somethingChanged = true;
+		break;
+		default:
+			window.somethingChanged = true;
+		break;
 	}
 }
 
@@ -116,8 +125,11 @@ function keyPressed()
 	if (key == 's' || key == 'S') saveThumb(650, 350);
 	if (key == ' ')
 	{
-		mouseInputActive = !mouseInputActive;
-		console.log(mouseInputActive);
+		mouseInputMode ++;
+		if (mouseInputMode > 2)
+		{
+			mouseInputMode = 0;
+		}
 	}
 	if (key == 'd' || key == 'D')
 	{
