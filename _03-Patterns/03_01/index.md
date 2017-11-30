@@ -2,7 +2,7 @@
 layout: sketch
 title: "holes in the fabric" 
 category: "Experiment" 
-thumb_name: "thumb.png"
+thumb_name: "thumb.PNG"
 ---
 
 <!-- 
