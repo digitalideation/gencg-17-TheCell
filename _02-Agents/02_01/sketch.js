@@ -2,6 +2,7 @@
 
 // Global var
 let mouseInputMode = 0;
+//let cycleInterval;
 let agents = [];
 
 function setup()
@@ -25,6 +26,18 @@ function setup()
 		agents.push(agent);
 	}
 
+	/*
+	cycleInterval = window.setInterval( function ()
+	{
+		agents.forEach( function ( element, index, arr)
+		{
+			element.walkCycle();
+		});
+
+		window.somethingChanged = true;
+	}, 1000);
+	*/
+
 	background(options.backgroundColor);
 }
 
@@ -32,20 +45,6 @@ function draw()
 {
 	if (window.somethingChanged)
 	{
-		// setup
-		randomSeed(options.randomSeed);
-		agents = [];
-
-		for(let i = 0; i < options.numberOfAgents; i++)
-		{
-			let agent = new Agent(
-							random(0, windowWidth),
-							random(0, windowHeight)
-						);
-
-			agents.push(agent);
-		}
-
 		// draw
 		background(options.backgroundColor);
 
@@ -70,6 +69,13 @@ function draw()
 			window.somethingChanged = true;
 		break;
 	}
+
+	agents.forEach( function ( element, index, arr)
+	{
+		element.walkCycle();
+	});
+
+	window.somethingChanged = true;
 }
 
 function keyPressed()
@@ -96,11 +102,59 @@ class Agent
 	constructor(pointX, pointY)
 	{
 		this.location = createVector(pointX, pointY);
+		this.startAngle = random(0, TWO_PI);
 	}
 
 	drawLocation()
 	{
-		point(this.location.x, this.location.y);
+		for (let i = 0; i < 15; i++)
+		{
+			point(this.location.x, this.location.y);
+			this.location.x = this.location.x + cos(this.startAngle);
+			this.location.y = this.location.y + sin(this.startAngle);
+		}
+	}
+
+	walkCycle()
+	{
+		if (this.location.x > 0)
+		{
+			if (this.location.x < windowWidth)
+			{
+			}
+			else
+			{
+				// going out on the right
+				// pi random to the left
+				this.startAngle = random(PI/2, 3*PI/2);
+			}
+		}
+		else
+		{
+			// going out on the left
+			// pi random to the right
+			this.startAngle = (-PI/2) + random(0, PI);
+		}
+
+		if (this.location.y > 0)
+		{
+			if (this.location.y < windowHeight)
+			{
+			}
+			else
+			{
+				// going out on the bottom
+				this.startAngle = random(PI, TWO_PI);
+			}
+		}
+		else
+		{
+			// going out on the top
+			this.startAngle = random(0, PI);
+		}
+
+		this.location.x = this.location.x + cos(this.startAngle);
+		this.location.y = this.location.y + sin(this.startAngle);
 	}
 }
 
