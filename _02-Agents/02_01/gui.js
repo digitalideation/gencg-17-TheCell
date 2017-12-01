@@ -40,7 +40,8 @@ window.onload = function()
 		{
 			let agent = new Agent(
 							random(0, windowWidth),
-							random(0, windowHeight)
+							random(0, windowHeight),
+							15
 						);
 
 			agents.push(agent);
