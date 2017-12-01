@@ -1,6 +1,6 @@
 ---
 layout: sketch
-title: "mouse in squaretown"
+title: "ants in a jar"
 category: "Experiment"
 thumb_name: "thumb.jpg"
 ---
