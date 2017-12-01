@@ -1,12 +1,8 @@
 "use strict";
 
 // Global var
-let topLeft;
-let bottomRight;
-let diagSize = Math.sqrt(
-		options.squareLength * options.squareLength
-		+ options.squareWidth * options.squareWidth)
-let mouseInputMode = 1;
+let mouseInputMode = 0;
+let agents = [];
 
 function setup()
 {
@@ -17,8 +13,17 @@ function setup()
 	var density = displayDensity();
 	pixelDensity(density);
 
-	topLeft = createVector(0, 0);
-	bottomRight = createVector(options.squareLength, options.squareWidth);
+	randomSeed(options.randomSeed);
+
+	for(let i = 0; i < options.numberOfAgents; i++)
+	{
+		let agent = new Agent(
+						random(0, windowWidth),
+						random(0, windowHeight)
+					);
+
+		agents.push(agent);
+	}
 
 	background(options.backgroundColor);
 }
@@ -27,14 +32,37 @@ function draw()
 {
 	if (window.somethingChanged)
 	{
+		// setup
+		randomSeed(options.randomSeed);
+		agents = [];
+
+		for(let i = 0; i < options.numberOfAgents; i++)
+		{
+			let agent = new Agent(
+							random(0, windowWidth),
+							random(0, windowHeight)
+						);
+
+			agents.push(agent);
+		}
+
+		// draw
 		background(options.backgroundColor);
 
-		
+		fill(options.agentColor);
+		agents.forEach( function ( element, index, arr)
+		{
+			element.drawLocation();
+		});
+
 		window.somethingChanged = false;
 	}
 
 	switch (mouseInputMode)
 	{
+		case 0:
+			window.somethingChanged = false;
+		break;
 		case 1:
 			window.somethingChanged = true;
 		break;
@@ -52,16 +80,27 @@ function keyPressed()
 		mouseInputMode ++;
 		if (mouseInputMode > 1)
 		{
-			mouseInputMode = 1;
+			mouseInputMode = 0;
 		}
 	}
 	if (key == 'd' || key == 'D')
 	{
-		options.numberOfSquares ++;
 	}
 	if (key == 'a' || key == 'A')
 	{
-		options.numberOfSquares --;
+	}
+}
+
+class Agent
+{
+	constructor(pointX, pointY)
+	{
+		this.location = createVector(pointX, pointY);
+	}
+
+	drawLocation()
+	{
+		point(this.location.x, this.location.y);
 	}
 }
 
