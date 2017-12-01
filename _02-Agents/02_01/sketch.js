@@ -20,7 +20,8 @@ function setup()
 	{
 		let agent = new Agent(
 						random(0, windowWidth),
-						random(0, windowHeight)
+						random(0, windowHeight),
+						15
 					);
 
 		agents.push(agent);
@@ -99,19 +100,31 @@ function keyPressed()
 
 class Agent
 {
-	constructor(pointX, pointY)
+	constructor(pointX, pointY, lineLength)
 	{
 		this.location = createVector(pointX, pointY);
 		this.startAngle = random(0, TWO_PI);
+		this.lineLength = lineLength;
+		this.points = [];
+
+		for (let i = 0; i < this.lineLength; i++)
+		{
+			let points = createVector(
+							this.location.x + cos(this.startAngle),
+							this.location.y + sin(this.startAngle)
+						);
+
+			this.points[i] = points;
+		}
 	}
 
 	drawLocation()
 	{
-		for (let i = 0; i < 15; i++)
+		//console.log(this.points.length);
+
+		for (let i = 0; i < this.points.length; i++)
 		{
-			point(this.location.x, this.location.y);
-			this.location.x = this.location.x + cos(this.startAngle);
-			this.location.y = this.location.y + sin(this.startAngle);
+			point(this.points[i].x, this.points[i].y);
 		}
 	}
 
@@ -153,8 +166,11 @@ class Agent
 			this.startAngle = random(0, PI);
 		}
 
+		this.points.shift();
 		this.location.x = this.location.x + cos(this.startAngle);
 		this.location.y = this.location.y + sin(this.startAngle);
+		let differentLoc = Object.assign({}, this.location);
+		this.points[this.points.length] = differentLoc;
 	}
 }
 
