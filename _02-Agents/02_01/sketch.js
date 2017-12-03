@@ -208,10 +208,18 @@ class Agent
 						}
 						else
 						{
+							this.startAngle -= PI/32;
 						}
 					}
 					else
 					{
+						// top left
+						if (headingLeft)
+						{
+							this.startAngle += PI/32;
+						}
+						{
+							this.startAngle += PI/32;
 						}
 					}
 				}
@@ -222,17 +230,21 @@ class Agent
 					{
 						if (headingLeft)
 						{
+							this.startAngle += PI/32;
 						}
 						else
 						{
+							this.startAngle += PI/32;
 						}
 					}
 					else
 					{
 						if (headingLeft)
 						{
+							this.startAngle -= PI/32;
 						}
 						{
+							this.startAngle -= PI/32;
 						}
 					}
 				}
@@ -247,14 +259,17 @@ class Agent
 					{
 						if (headingLeft)
 						{
+							this.startAngle += PI/32;
 						}
 						else
 						{
+							this.startAngle -= PI/32;
 						}
 					}
 					{
 						if (headingLeft)
 						{
+							//this.startAngle += PI/32;
 						}
 						else
 						{
