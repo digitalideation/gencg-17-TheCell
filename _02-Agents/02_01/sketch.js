@@ -51,8 +51,7 @@ function draw()
 			options.backgroundColor[0],
 			options.backgroundColor[1],
 			options.backgroundColor[2],
-			options.backgroundAlpha
-		);
+			options.backgroundAlpha);
 		stroke(color(options.agentColor));
 		strokeWeight(options.agentFatness);
 		fill(options.agentColor);
@@ -177,10 +176,8 @@ class Agent
 		let distXFromMouse = this.location.x - mouseX; // -100 = left of mouse
 		let distYFromMouse = this.location.y - mouseY; // -100 = above mouse
 
-		if (
-			(distXFromMouse < 100 && distXFromMouse > -100)
-			&& (distYFromMouse < 100 && distYFromMouse > -100)
-			)
+		if ((distXFromMouse < 100 && distXFromMouse > -100)
+			&& (distYFromMouse < 100 && distYFromMouse > -100))
 		{
 			realSpeed = options.maxSpeed;
 			let headingBottom = false;
@@ -266,6 +263,7 @@ class Agent
 							this.startAngle -= PI/32;
 						}
 					}
+					else
 					{
 						if (headingLeft)
 						{
@@ -291,6 +289,7 @@ class Agent
 							//this.startAngle += PI/32;
 						}
 					}
+					else
 					{
 						if (headingLeft)
 						{
