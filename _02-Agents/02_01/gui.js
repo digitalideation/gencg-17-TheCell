@@ -1,8 +1,12 @@
 let options = {
 	randomSeed: 2018,
 	numberOfAgents: 100,
-	agentColor: [0, 0, 0], //RGB
-	backgroundColor: [40, 165, 180], //RGB
+	moveSpeed: 2,
+	maxSpeed: 5,
+	agentFatness: 5,
+	agentColor: [255, 255, 255], //RGB
+	backgroundColor: [0, 0, 0], //RGB
+	backgroundAlpha: 20, //RGB
 };
 
 window.somethingChanged = true;
@@ -13,10 +17,41 @@ window.onload = function()
 	window.gui = new dat.GUI();
 	window.gui.closed = true;
 
-	let randomSeedOpt = window.gui.add(options, 'randomSeed').min(1).max(10000).step(1)
-	let numberOfAgents = window.gui.add(options, 'numberOfAgents').min(1).max(2000).step(1)
+	let randomSeedOpt = window
+						.gui
+						.add(options, 'randomSeed')
+						.min(1)
+						.max(10000)
+						.step(1);
+	let numberOfAgents = window
+						.gui
+						.add(options, 'numberOfAgents')
+						.min(1)
+						.max(2000)
+						.step(1);
+	let agentFatness = window
+						.gui
+						.add(options, 'agentFatness')
+						.min(1)
+						.max(10)
+						.step(1);
+	let moveSpeed = window
+						.gui
+						.add(options, 'moveSpeed')
+						.min(1)
+						.max(5)
+						.step(0.1);
+	let backgroundAlpha = window
+						.gui
+						.add(options, 'backgroundAlpha')
+						.min(1)
+						.max(100)
+						.step(1);
 	controllers.push(randomSeedOpt);
 	controllers.push(numberOfAgents);
+	controllers.push(agentFatness);
+	controllers.push(moveSpeed);
+	controllers.push(backgroundAlpha);
 	controllers.push(window.gui.addColor(options, 'agentColor'));
 	controllers.push(window.gui.addColor(options, 'backgroundColor'));
 
@@ -48,5 +83,13 @@ window.onload = function()
 		}
 	}
 
+	moveSpeed.onChange( function ()
+	{
+		let moveSpeed = this.object.moveSpeed;
+		agents.forEach( function (element, index, arr)
+		{
+			element.moveSpeed = moveSpeed;
+		})
+	});
 
 };

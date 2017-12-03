@@ -39,7 +39,7 @@ function setup()
 	}, 1000);
 	*/
 
-	background(options.backgroundColor);
+	background(options.backgroundColor, options.backgroundAlpha);
 }
 
 function draw()
@@ -47,8 +47,14 @@ function draw()
 	if (window.somethingChanged)
 	{
 		// draw
-		background(options.backgroundColor);
-
+		background(
+			options.backgroundColor[0],
+			options.backgroundColor[1],
+			options.backgroundColor[2],
+			options.backgroundAlpha
+		);
+		stroke(color(options.agentColor));
+		strokeWeight(options.agentFatness);
 		fill(options.agentColor);
 		agents.forEach( function ( element, index, arr)
 		{
@@ -105,6 +111,7 @@ class Agent
 		this.location = createVector(pointX, pointY);
 		this.startAngle = random(0, TWO_PI);
 		this.lineLength = lineLength;
+		this.moveSpeed = options.moveSpeed;
 		this.points = [];
 
 		for (let i = 0; i < this.lineLength; i++)
@@ -120,8 +127,6 @@ class Agent
 
 	drawLocation()
 	{
-		//console.log(this.points.length);
-
 		for (let i = 0; i < this.points.length; i++)
 		{
 			point(this.points[i].x, this.points[i].y);
@@ -167,8 +172,82 @@ class Agent
 		}
 
 		this.points.shift();
-		this.location.x = this.location.x + cos(this.startAngle);
-		this.location.y = this.location.y + sin(this.startAngle);
+		// up the movespeed the closer the mouse gets
+		let realSpeed = this.moveSpeed;
+		let distXFromMouse = this.location.x - mouseX; // -100 = left of mouse
+		let distYFromMouse = this.location.y - mouseY; // -100 = above mouse
+
+		if (
+			(distXFromMouse < 100 && distXFromMouse > -100)
+			&& (distYFromMouse < 100 && distYFromMouse > -100)
+			)
+		{
+			realSpeed = options.maxSpeed;
+			let headingBottom = false;
+
+			if (this.startAngle > 0 && this.startAngle < PI)
+			{
+				headingBottom = true;
+			}
+
+			if (distYFromMouse < 100 && distYFromMouse > 0)
+			{
+				if (distXFromMouse < 100 && distXFromMouse > 0)
+				{
+					// bottom right
+					if (headingBottom)
+					{
+						this.startAngle -= PI/32;
+					}
+					else
+					{
+						this.startAngle += PI/32;
+					}
+				}
+				else
+				{
+					// bottom left
+					if (headingBottom)
+					{
+						this.startAngle += PI/32;
+					}
+					else
+					{
+						this.startAngle -= PI/32;
+					}
+				}
+
+			}
+			else
+			{
+				if (distXFromMouse < 100 && distXFromMouse > 0)
+				{
+					// top right
+					if (headingBottom)
+					{
+						this.startAngle -= PI/32;
+					}
+					{
+						this.startAngle += PI/32;
+					}
+				}
+				else
+				{
+					// top left
+					if (headingBottom)
+					{
+						this.startAngle += PI/32;
+					}
+					{
+						this.startAngle -= PI/32;
+					}
+				}
+			}
+		}
+
+
+		this.location.x = this.location.x + cos(this.startAngle) * realSpeed;
+		this.location.y = this.location.y + sin(this.startAngle) * realSpeed;
 		let differentLoc = Object.assign({}, this.location);
 		this.points[this.points.length] = differentLoc;
 	}
