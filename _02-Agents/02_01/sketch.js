@@ -184,10 +184,15 @@ class Agent
 		{
 			realSpeed = options.maxSpeed;
 			let headingBottom = false;
+			let headingLeft = false;
 
 			if (this.startAngle > 0 && this.startAngle < PI)
 			{
 				headingBottom = true;
+			}
+			if (this.startAngle > PI/2 && this.startAngle < 3*PI/2)
+			{
+				headingLeft = true;
 			}
 
 			if (distYFromMouse < 100 && distYFromMouse > 0)
@@ -197,11 +202,17 @@ class Agent
 					// bottom right
 					if (headingBottom)
 					{
-						this.startAngle -= PI/32;
+						if (headingLeft)
+						{
+							this.startAngle -= PI/32;
+						}
+						else
+						{
+						}
 					}
 					else
 					{
-						this.startAngle += PI/32;
+						}
 					}
 				}
 				else
@@ -209,11 +220,20 @@ class Agent
 					// bottom left
 					if (headingBottom)
 					{
-						this.startAngle += PI/32;
+						if (headingLeft)
+						{
+						}
+						else
+						{
+						}
 					}
 					else
 					{
-						this.startAngle -= PI/32;
+						if (headingLeft)
+						{
+						}
+						{
+						}
 					}
 				}
 
@@ -225,10 +245,21 @@ class Agent
 					// top right
 					if (headingBottom)
 					{
-						this.startAngle -= PI/32;
+						if (headingLeft)
+						{
+						}
+						else
+						{
+						}
 					}
 					{
-						this.startAngle += PI/32;
+						if (headingLeft)
+						{
+						}
+						else
+						{
+							//this.startAngle += PI/32;
+						}
 					}
 				}
 				else
@@ -236,10 +267,24 @@ class Agent
 					// top left
 					if (headingBottom)
 					{
-						this.startAngle += PI/32;
+						if (headingLeft)
+						{
+							//this.startAngle += PI/32;
+						}
+						else
+						{
+							//this.startAngle += PI/32;
+						}
 					}
 					{
-						this.startAngle -= PI/32;
+						if (headingLeft)
+						{
+							//this.startAngle -= PI/32;
+						}
+						else
+						{
+							//this.startAngle -= PI/32;
+						}
 					}
 				}
 			}
