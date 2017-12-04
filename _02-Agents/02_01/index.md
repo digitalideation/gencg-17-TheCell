@@ -1,6 +1,6 @@
 ---
 layout: sketch
-title: "ants in a jar"
+title: "shy comets"
 category: "Experiment"
 thumb_name: "thumb.jpg"
 ---

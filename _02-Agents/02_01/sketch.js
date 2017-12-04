@@ -201,11 +201,11 @@ class Agent
 					{
 						if (headingLeft)
 						{
-							this.startAngle -= PI/32;
+							this.startAngle -= options.turnRadius;
 						}
 						else
 						{
-							this.startAngle -= PI/32;
+							this.startAngle -= options.turnRadius;
 						}
 					}
 					else
@@ -213,10 +213,10 @@ class Agent
 						// top left
 						if (headingLeft)
 						{
-							this.startAngle += PI/32;
+							this.startAngle += options.turnRadius;
 						}
 						{
-							this.startAngle += PI/32;
+							this.startAngle += options.turnRadius;
 						}
 					}
 				}
@@ -227,21 +227,21 @@ class Agent
 					{
 						if (headingLeft)
 						{
-							this.startAngle -= PI/32;
+							this.startAngle -= options.turnRadius;
 						}
 						else
 						{
-							this.startAngle += PI/32;
+							this.startAngle += options.turnRadius;
 						}
 					}
 					else
 					{
 						if (headingLeft)
 						{
-							this.startAngle -= PI/32;
+							this.startAngle -= options.turnRadius;
 						}
 						{
-							this.startAngle -= PI/32;
+							this.startAngle -= options.turnRadius;
 						}
 					}
 				}
@@ -256,22 +256,22 @@ class Agent
 					{
 						if (headingLeft)
 						{
-							this.startAngle -= PI/32;
+							this.startAngle -= options.turnRadius;
 						}
 						else
 						{
-							this.startAngle -= PI/32;
+							this.startAngle -= options.turnRadius;
 						}
 					}
 					else
 					{
 						if (headingLeft)
 						{
-							this.startAngle += PI/32;
+							this.startAngle += options.turnRadius;
 						}
 						else
 						{
-							this.startAngle -= PI/32;
+							this.startAngle -= options.turnRadius;
 						}
 					}
 				}
@@ -282,22 +282,22 @@ class Agent
 					{
 						if (headingLeft)
 						{
-							this.startAngle += PI/32;
+							this.startAngle += options.turnRadius;
 						}
 						else
 						{
-							this.startAngle += PI/32;
+							this.startAngle += options.turnRadius;
 						}
 					}
 					else
 					{
 						if (headingLeft)
 						{
-							this.startAngle -= PI/32;
+							this.startAngle -= options.turnRadius;
 						}
 						else
 						{
-							this.startAngle -= PI/32;
+							this.startAngle -= options.turnRadius;
 						}
 					}
 				}

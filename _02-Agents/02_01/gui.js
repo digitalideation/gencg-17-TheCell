@@ -4,6 +4,7 @@ let options = {
 	moveSpeed: 2,
 	maxSpeed: 5,
 	agentFatness: 5,
+	turnRadius: Math.PI/32,
 	agentColor: [255, 255, 255], //RGB
 	backgroundColor: [0, 0, 0], //RGB
 	backgroundAlpha: 20, //RGB
@@ -47,9 +48,16 @@ window.onload = function()
 						.min(1)
 						.max(100)
 						.step(1);
+	let turnRadius = window
+						.gui
+						.add(options, 'turnRadius')
+						.min(0)
+						.max(PI/2)
+						.step(Math.PI/128);
 	controllers.push(randomSeedOpt);
 	controllers.push(numberOfAgents);
 	controllers.push(agentFatness);
+	controllers.push(turnRadius);
 	controllers.push(moveSpeed);
 	controllers.push(backgroundAlpha);
 	controllers.push(window.gui.addColor(options, 'agentColor'));
