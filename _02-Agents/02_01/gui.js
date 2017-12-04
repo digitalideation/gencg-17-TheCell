@@ -1,6 +1,6 @@
 let options = {
 	randomSeed: 2018,
-	numberOfAgents: 100,
+	numberOfAgents: 50,
 	moveSpeed: 2,
 	maxSpeed: 5,
 	agentFatness: 5,
