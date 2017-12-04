@@ -1,6 +1,6 @@
 ---
 layout: sketch
-title: "Empty Setup"
+title: "Basic Setup"
 category: "Experiment"
 thumb_name: "thumb.jpg"
 ---
