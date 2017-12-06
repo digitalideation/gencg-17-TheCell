@@ -158,10 +158,12 @@ class Agent
 		this.useRadius = false;
 		this.angle = random(0, Math.PI * 2);
 		this.angleStep = Math.PI / 64;
+		// set middle point
 		this.location = createVector(
 			middlePointX,
 			middlePointY);
 
+		// draw the startingpoint
 		let points;
 		if (this.pointRandom)
 		{
@@ -248,8 +250,10 @@ class Agent
 			this.angle = this.angle + this.angleStep;
 		}
 
-		newX = this.points[this.points.length - 1].x + cos(this.angle) * this.moveSpeed;
-		newY = this.points[this.points.length - 1].y + sin(this.angle) * this.moveSpeed;
+		newX = this.points[this.points.length - 1].x
+			+ (cos(this.angle) * this.moveSpeed);
+		newY = this.points[this.points.length - 1].y
+			+ (sin(this.angle) * this.moveSpeed);
 
 		if (this.useRadius)
 		{
@@ -262,6 +266,7 @@ class Agent
 			}
 			else
 			{
+				// set the pos back a step
 				newX = this.points[this.points.length - 1].x;
 				newY = this.points[this.points.length - 1].y;
 
