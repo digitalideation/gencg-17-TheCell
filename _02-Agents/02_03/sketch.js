@@ -16,15 +16,20 @@ function setup()
 
 	randomSeed(options.randomSeed);
 
-	for(let i = 0; i < options.numberOfAgents; i++)
+	for (let y = 0; y * options.tileSize < windowHeight; y++)
 	{
-		let agent = new Agent(
-						random(0, windowWidth),
-						random(0, windowHeight),
-						15
-					);
+		for(let x = 0; x * options.tileSize < windowWidth; x++)
+		{
+			let agent = new Agent(
+					random(
+						x * options.tileSize,
+						x * options.tileSize + options.tileSize),
+					random(
+						y * options.tileSize,
+						y * options.tileSize + options.tileSize));
 
-		agents.push(agent);
+			agents.push(agent);
+		}
 	}
 
 	/*
@@ -129,12 +134,21 @@ function cleanDeadAgents(arrayWithAgents)
 
 class Agent
 {
-	constructor(pointX, pointY)
+	constructor(middlePointX, middlePointY)
 	{
-		this.location = createVector(pointX, pointY);
 		this.moveSpeed = options.moveSpeed;
 		this.points = [];
 		this.agentAlive = true;
+		this.tileWidth = options.tileSize;
+		this.tileHeight = options.tileSize;
+		this.radius = options.tileSize;
+		this.pointRandom = false;
+		this.drawAllPoints = false;
+		this.useRadius = true;
+		this.angle = random(0, TWO_PI);
+		this.location = createVector(
+			middlePointX,
+			middlePointY);
 
 		let points = createVector(
 			this.location.x,
@@ -145,14 +159,50 @@ class Agent
 
 	drawLocation()
 	{
-		for (let i = 0; i < this.points.length; i++)
+		if (this.drawAllPoints)
 		{
-			point(this.points[i].x, this.points[i].y);
+			for (let i = 0; i < this.points.length; i++)
+			{
+				point(this.points[i].x, this.points[i].y);
+			}
+		}
+		else
+		{
+			point(
+				this.points[this.points.length -1].x,
+				this.points[this.points.length -1].y);
 		}
 	}
 
 	updateCycle()
 	{
+		if (this.useRadius)
+		{
+			let newX = this.points[this.points.length -1].x + cos(this.angle);
+			let newY = this.points[this.points.length -1].y + sin(this.angle);
+
+			if (newX - (this.location.x - this.radius/2) < 0)
+			{
+				newX = this.location.x - this.radius/2;
+			}
+			else if (newX - this.location.x > this.location.x + this.radius/2)
+			{
+				newX = this.location.x + this.radius/2;
+			}
+
+			if (newY - (this.location.y - this.radius/2) < 0)
+			{
+				newY = this.location.y - this.radius/2;
+			}
+			else if (newY - this.location.y > this.location.y + this.radius/2)
+			{
+				newY = this.location.y + this.radius/2;
+			}
+
+			let newP = createVector(newX, newY);
+			this.points.push(newP);
+		}
+
 		if (false)
 		{
 			this.agentAlive = false;

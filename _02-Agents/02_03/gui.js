@@ -1,11 +1,12 @@
 let options = {
 	randomSeed: 2018,
-	numberOfAgents: 100,
+	//numberOfAgents: 100,
 	moveSpeed: 2,
 	maxSpeed: 5,
 	agentFatness: 5,
 	turnRadius: Math.PI/32,
 	timeToLive: 100,
+	tileSize: 50,
 	agentColor: [0, 0, 0], //RGB
 	backgroundColor: [255, 255, 255], //RGB
 	backgroundAlpha: 30, //RGB
@@ -25,12 +26,12 @@ window.onload = function()
 						.min(1)
 						.max(10000)
 						.step(1);
-	let numberOfAgents = window
-						.gui
-						.add(options, 'numberOfAgents')
-						.min(1)
-						.max(2000)
-						.step(1);
+	// let numberOfAgents = window
+	// 					.gui
+	// 					.add(options, 'numberOfAgents')
+	// 					.min(1)
+	// 					.max(2000)
+	// 					.step(1);
 	let agentFatness = window
 						.gui
 						.add(options, 'agentFatness')
@@ -62,7 +63,7 @@ window.onload = function()
 						.max(1000)
 						.step(1);
 	controllers.push(randomSeedOpt);
-	controllers.push(numberOfAgents);
+	// controllers.push(numberOfAgents);
 	controllers.push(agentFatness);
 	controllers.push(turnRadius);
 	controllers.push(timeToLive);
@@ -80,7 +81,7 @@ window.onload = function()
 	});
 
 	randomSeedOpt.onChange( resetAgents );
-	numberOfAgents.onChange( resetAgents );
+	//numberOfAgents.onChange( resetAgents );
 
 	function resetAgents ()
 	{
