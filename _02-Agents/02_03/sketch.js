@@ -20,29 +20,19 @@ function setup()
 	{
 		for(let x = 0; x * options.tileSize < windowWidth; x++)
 		{
-			let agent = new Agent(
-					random(
-						x * options.tileSize,
-						x * options.tileSize + options.tileSize),
-					random(
-						y * options.tileSize,
-						y * options.tileSize + options.tileSize));
+			let agent;
+			let startX;
+			let startY;
 
-			agents.push(agent);
+			startX = x * options.tileSize + options.tileSize / 2;
+			startY = y * options.tileSize + options.tileSize / 2;
+			for (let i = 0; i < options.numberOfAgents; i++)
+			{
+				agent = new Agent(startX, startY);
+				agents.push(agent);
+			}
 		}
 	}
-
-	/*
-	cycleInterval = window.setInterval( function ()
-	{
-		agents.forEach( function ( element, index, arr)
-		{
-			element.walkCycle();
-		});
-
-		window.somethingChanged = true;
-	}, 1000);
-	*/
 
 	background(options.backgroundColor, options.backgroundAlpha);
 }
@@ -65,15 +55,19 @@ function draw()
 			element.drawLocation();
 		});
 
-		let amountKilled = cleanDeadAgents(agents);
-		for (let i = 0; i < amountKilled; i++)
+		// clean and restart dead Agents
+		let amountKilled = cleanDeadAgents(agents, true);
+		amountKilled.forEach( function (element, index, arr)
 		{
-			let agent = new Agent(
-				random(0, windowWidth),
-				random(0, windowHeight));
+			let agent;
+			let startX;
+			let startY;
 
+			startX = element.location.x;
+			startY = element.location.y;
+			agent = new Agent(startX, startY);
 			agents.push(agent);
-		}
+		});
 
 		window.somethingChanged = false;
 	}
@@ -116,20 +110,37 @@ function keyPressed()
 	}
 }
 
-function cleanDeadAgents(arrayWithAgents)
+/**
+ * removes dead agents from agents array and returns the count or the agents
+ * that were removed
+ * @param  {Array}  arrayWithAgents array with active and dead agents
+ * @param  {Boolean} returnObjects    true if removed agents needed
+ * @return {Integer or Array}       returns Integer amount killed or Array
+ * with dead agents
+ */
+function cleanDeadAgents(arrayWithAgents, returnObjects = false)
 {
 	let killCount = 0;
+	let killedObjects = [];
 
 	arrayWithAgents.forEach( function(element, index, arr)
 	{
 		if (!element.agentAlive)
 		{
-			arr.splice(index, 1);
+			killedObjects.push(element);
 			killCount ++;
+			arr.splice(index, 1);
 		}
 	});
 
-	return killCount;
+	if (returnObjects)
+	{
+		return killedObjects;
+	}
+	else
+	{
+		return killCount;
+	}
 }
 
 class Agent
@@ -141,25 +152,40 @@ class Agent
 		this.agentAlive = true;
 		this.tileWidth = options.tileSize;
 		this.tileHeight = options.tileSize;
-		this.radius = options.tileSize;
+		this.radius = options.tileSize / 2;
 		this.pointRandom = false;
 		this.drawAllPoints = false;
-		this.useRadius = true;
-		this.angle = random(0, TWO_PI);
+		this.useRadius = false;
+		this.angle = random(0, Math.PI * 2);
+		this.angleStep = Math.PI / 64;
 		this.location = createVector(
 			middlePointX,
 			middlePointY);
 
-		let points = createVector(
-			this.location.x,
-			this.location.y);
+		let points;
+		if (this.pointRandom)
+		{
+			let xPos = random(
+				this.location.x - this.tileWidth / 2,
+				this.location.x + this.tileWidth / 2);
+			let yPos = random(
+				this.location.y - this.tileHeight / 2,
+				this.location.y + this.tileHeight / 2);
+			points = createVector(xPos, yPos);
+		}
+		else
+		{
+			points = createVector(
+				this.location.x,
+				this.location.y);
+		}
 
 		this.points[0] = points;
 	}
 
-	drawLocation()
+	drawLocation(drawAllPointsAnyway = false)
 	{
-		if (this.drawAllPoints)
+		if (drawAllPointsAnyway)
 		{
 			for (let i = 0; i < this.points.length; i++)
 			{
@@ -168,45 +194,212 @@ class Agent
 		}
 		else
 		{
-			point(
-				this.points[this.points.length -1].x,
-				this.points[this.points.length -1].y);
+			if (this.drawAllPoints)
+			{
+				for (let i = 0; i < this.points.length; i++)
+				{
+					point(this.points[i].x, this.points[i].y);
+				}
+			}
+			else
+			{
+				point(
+					this.points[this.points.length - 1].x,
+					this.points[this.points.length - 1].y);
+			}
 		}
+	}
+
+	incrementAngle()
+	{
+		this.angle += this.angleStep;
+	}
+
+	decrementAngle()
+	{
+		this.angle -= this.angleStep;
 	}
 
 	updateCycle()
 	{
+		let newX;
+		let newY;
+
+		if (
+			cos(this.angle) < 0.01
+			&& cos(this.angle) > -0.01
+			&& ((this.points[this.points.length - 1].y
+				>= this.location.y + this.tileHeight / 2)
+				|| (this.points[this.points.length - 1].y
+				<= this.location.y - this.tileHeight / 2)))
+		{
+			// check if it is at the top or bottom middle and speed it up a bit
+			this.angle = this.angle + this.angleStep;
+		}
+		else if (
+			sin(this.angle) < 0.1
+			&& sin(this.angle) > -0.1
+			&& ((this.points[this.points.length - 1].x
+				>= this.location.x + this.tileWidth / 2)
+				|| (this.points[this.points.length - 1].x
+				<= this.location.x - this.tileWidth / 2)))
+		{
+			// check if it is at the left or right middle and speed it up a bit
+			this.angle = this.angle + this.angleStep;
+		}
+
+		newX = this.points[this.points.length - 1].x + cos(this.angle) * this.moveSpeed;
+		newY = this.points[this.points.length - 1].y + sin(this.angle) * this.moveSpeed;
+
 		if (this.useRadius)
 		{
-			let newX = this.points[this.points.length -1].x + cos(this.angle);
-			let newY = this.points[this.points.length -1].y + sin(this.angle);
+			if (
+				Math.pow(Math.abs(newX - this.location.x), 2)
+				+ Math.pow(Math.abs(newY - this.location.y), 2)
+				< Math.pow(this.radius, 2))
+			{
+				// all normal
+			}
+			else
+			{
+				newX = this.points[this.points.length - 1].x;
+				newY = this.points[this.points.length - 1].y;
 
-			if (newX - (this.location.x - this.radius/2) < 0)
-			{
-				newX = this.location.x - this.radius/2;
-			}
-			else if (newX - this.location.x > this.location.x + this.radius/2)
-			{
-				newX = this.location.x + this.radius/2;
-			}
+				if (
+					this.angle > Math.PI / 2
+					&& this.angle < Math.PI * 3/2)
+				{
+					this.incrementAngle();
+				}
+				else if ((this.angle < Math.PI / 2)
+					|| this.angle > Math.PI * 3/2)
+				{
+					this.decrementAngle();
+				}
 
-			if (newY - (this.location.y - this.radius/2) < 0)
-			{
-				newY = this.location.y - this.radius/2;
-			}
-			else if (newY - this.location.y > this.location.y + this.radius/2)
-			{
-				newY = this.location.y + this.radius/2;
-			}
+				/*
+				if (this.angle > 0
+					&& (this.angle < Math.PI
+						|| this.angle > Math.PI * 3/2))
+				{
+					this.decrementAngle();
+				}
+				else
+					*/
 
-			let newP = createVector(newX, newY);
-			this.points.push(newP);
+				// if (this.angle >= 0
+				// 	&& this.angle < (Math.PI / 2))
+				// {
+				// 	// bottom right direction
+				// 	// this.angle += angleStep;
+				// 	this.incrementAngle();
+				// }
+				// else if (this.angle >= (Math.PI / 2)
+				// 	&& this.angle < Math.PI)
+				// {
+				// 	// bottom left direction
+				// 	// this.angle += angleStep;
+				// 	this.incrementAngle();
+				// }
+				// else if (this.angle >= Math.PI
+				// 	&& this.angle < (2 * Math.PI * 2 / 3))
+				// {
+				// 	// top left direction
+				// 	// this.angle -= angleStep;
+				// 	this.incrementAngle();
+				// }
+				// else if (this.angle >= (2 * Math.PI * 2 / 3)
+				// 	&& this.angle < Math.PI * 2)
+				// {
+				// 	// top right direction
+				// 	// this.angle += angleStep;
+				// 	this.incrementAngle();
+				// }
+				// else
+				// {
+				// 	this.angle += angleStep;
+				// }
+			}
+			// if (newX < (this.location.x - this.radius))
+			// {
+			// 	newX = this.location.x - this.radius;
+			// }
+			// else if (newX > (this.location.x + this.radius))
+			// {
+			// 	newX = this.location.x + this.radius;
+			// }
+
+			// if (newY < (this.location.y - this.radius))
+			// {
+			// 	newY = this.location.y - this.radius;
+			// }
+			// else if (newY > (this.location.y + this.radius))
+			// {
+			// 	newY = this.location.y + this.radius;
+			// }
+			if (this.angle > Math.PI * 2 || this.angle < 0)
+			{
+				this.agentAlive = false;
+			}
 		}
-
-		if (false)
+		else
 		{
-			this.agentAlive = false;
+			// if (this.angle >= 0 && this.angle < Math.PI / 2)
+			// {
+			// 	// bottom right direction
+			// }
+			// else if (this.angle >= Math.PI / 2 && this.angle < Math.PI)
+			// {
+			// 	// bottom left direction
+			// }
+			// else if (this.angle >= Math.PI && this.angle < 2 * Math.PI / 3)
+			// {
+			// 	// top left direction
+			// }
+			// else
+			// {
+			// 	// top right direction
+			// }
+
+			// left local border
+			if (newX < (this.location.x - this.tileWidth / 2))
+			{
+				newX = this.location.x - this.tileWidth / 2;
+			}
+			else if (newX > (this.location.x + this.tileWidth / 2))
+			{
+				newX = this.location.x + this.tileWidth / 2;
+			}
+
+			if (newY < (this.location.y - this.tileHeight / 2))
+			{
+				newY = this.location.y - this.tileHeight / 2;
+			}
+			else if (newY > (this.location.y + this.tileHeight / 2))
+			{
+				newY = this.location.y + this.tileHeight / 2;
+			}
+
+			let inTopLeftCorner = (newX <= this.location.x - this.tileWidth / 2
+				&& newY <= this.location.y - this.tileHeight / 2);
+			let inBottomRightCorner = (newX >= this.location.x + this.tileWidth / 2
+				&& newY >= this.location.y + this.tileHeight / 2);
+			let inTopRightCorner = (newX >= this.location.x + this.tileWidth / 2
+				&& newY <= this.location.y - this.tileHeight / 2);
+			let inBottomLeftCorner = (newX <= this.location.x - this.tileWidth / 2
+				&& newY >= this.location.y + this.tileHeight / 2);
+
+			if (inTopLeftCorner
+				|| inBottomRightCorner
+				|| inTopRightCorner
+				|| inBottomLeftCorner)
+			{
+				this.agentAlive = false;
+			}
 		}
+
+		let newP = createVector(newX, newY);
+		this.points.push(newP);
 	}
 }
 

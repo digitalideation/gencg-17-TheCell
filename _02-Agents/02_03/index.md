@@ -1,6 +1,6 @@
 ---
 layout: sketch
-title: "Basic Setup"
+title: "tiled spreadout"
 category: "Experiment"
 thumb_name: "thumb.jpg"
 ---
