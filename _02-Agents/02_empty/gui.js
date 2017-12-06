@@ -1,14 +1,15 @@
 let options = {
 	randomSeed: 2018,
-	numberOfAgents: 100,
+	numberOfAgents: 10,
 	moveSpeed: 2,
-	maxSpeed: 5,
-	agentFatness: 5,
-	turnRadius: Math.PI/32,
+	// maxSpeed: 5,
+	agentFatness: 3,
+	// turnRadius: Math.PI/32,
 	timeToLive: 100,
+	tileSize: 150,
 	agentColor: [0, 0, 0], //RGB
 	backgroundColor: [255, 255, 255], //RGB
-	backgroundAlpha: 30, //RGB
+	backgroundAlpha: 0, //RGB
 };
 
 window.somethingChanged = true;
@@ -29,7 +30,7 @@ window.onload = function()
 						.gui
 						.add(options, 'numberOfAgents')
 						.min(1)
-						.max(2000)
+						.max(10)
 						.step(1);
 	let agentFatness = window
 						.gui
@@ -49,24 +50,31 @@ window.onload = function()
 						.min(1)
 						.max(100)
 						.step(1);
-	let turnRadius = window
-						.gui
-						.add(options, 'turnRadius')
-						.min(0)
-						.max(PI/2)
-						.step(Math.PI/128);
+	// let turnRadius = window
+	// 					.gui
+	// 					.add(options, 'turnRadius')
+	// 					.min(0)
+	// 					.max(PI/2)
+	// 					.step(Math.PI/128);
 	let timeToLive = window
 						.gui
 						.add(options, 'timeToLive')
 						.min(1)
 						.max(1000)
 						.step(1);
+	let tileSize = window
+						.gui
+						.add(options, 'tileSize')
+						.min(50)
+						.max(1000)
+						.step(1);
 	controllers.push(randomSeedOpt);
 	controllers.push(numberOfAgents);
 	controllers.push(agentFatness);
-	controllers.push(turnRadius);
+	// controllers.push(turnRadius);
 	controllers.push(timeToLive);
-	controllers.push(moveSpeed);
+	controllers.push(tileSize);
+	// controllers.push(moveSpeed);
 	controllers.push(backgroundAlpha);
 	controllers.push(window.gui.addColor(options, 'agentColor'));
 	controllers.push(window.gui.addColor(options, 'backgroundColor'));
@@ -81,31 +89,32 @@ window.onload = function()
 
 	randomSeedOpt.onChange( resetAgents );
 	numberOfAgents.onChange( resetAgents );
+	tileSize.onChange( resetAgents );
 
 	function resetAgents ()
 	{
-		randomSeed(options.randomSeed);
 		agents = [];
 
-		for(let i = 0; i < options.numberOfAgents; i++)
-		{
-			let agent = new Agent(
-							random(0, windowWidth),
-							random(0, windowHeight),
-							15
-						);
+		background(options.backgroundColor);
 
-			agents.push(agent);
+		randomSeed(options.randomSeed);
+
+		for (let y = 0; y * options.tileSize < windowHeight; y++)
+		{
+			for(let x = 0; x * options.tileSize < windowWidth; x++)
+			{
+				let agent;
+				let startX;
+				let startY;
+
+				startX = x * options.tileSize + options.tileSize / 2;
+				startY = y * options.tileSize + options.tileSize / 2;
+				for (let i = 0; i < options.numberOfAgents; i++)
+				{
+					agent = new Agent(startX, startY);
+					agents.push(agent);
+				}
+			}
 		}
 	}
-
-	moveSpeed.onChange( function ()
-	{
-		let moveSpeed = this.object.moveSpeed;
-		agents.forEach( function (element, index, arr)
-		{
-			element.moveSpeed = moveSpeed;
-		})
-	});
-
 };
