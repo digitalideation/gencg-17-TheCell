@@ -16,19 +16,27 @@ function setup()
 
 	randomSeed(options.randomSeed);
 
-	for (let y = 0; y * options.tileSize < windowHeight; y++)
+	for (let y = 0; y * options.tileHeight < windowHeight; y++)
 	{
-		for(let x = 0; x * options.tileSize < windowWidth; x++)
+		for(let x = 0; x * options.tileWidth < windowWidth; x++)
 		{
 			let agent;
 			let startX;
 			let startY;
 
-			startX = x * options.tileSize + options.tileSize / 2;
-			startY = y * options.tileSize + options.tileSize / 2;
+			startX = x * options.tileWidth + options.tileWidth / 2;
+			startY = y * options.tileHeight + options.tileHeight / 2;
 			for (let i = 0; i < options.numberOfAgents; i++)
 			{
-				agent = new Agent(startX, startY);
+				agent = new Agent(
+					startX,
+					startY,
+					startX,
+					startY,
+					random(0, Math.PI * 2),
+					2,
+					options.tileWidth,
+					options.tileHeight);
 				agents.push(agent);
 			}
 		}
@@ -60,12 +68,16 @@ function draw()
 		amountKilled.forEach( function (element, index, arr)
 		{
 			let agent;
-			let startX;
-			let startY;
 
-			startX = element.location.x;
-			startY = element.location.y;
-			agent = new Agent(startX, startY);
+			agent = new Agent(
+				element.location.x,
+				element.location.y,
+				element.location.x,
+				element.location.y,
+				random(0, Math.PI * 2),
+				2,
+				options.tileWidth,
+				options.tileHeight);
 			agents.push(agent);
 		});
 
@@ -145,18 +157,27 @@ function cleanDeadAgents(arrayWithAgents, returnObjects = false)
 
 class Agent
 {
-	constructor(middlePointX, middlePointY)
+	constructor(
+		middlePointX,
+		middlePointY,
+		spawnX = middlePointX,
+		spawnY = middlePointY,
+		angle = random(0, Math.PI * 2),
+		moveSpeed = options.moveSpeed,
+		tileWidth = options.tileWidth,
+		tileHeight = options.tileHeight,
+		radius = options.tileWidth / 2)
 	{
-		this.moveSpeed = options.moveSpeed;
+		this.moveSpeed = moveSpeed;
 		this.points = [];
 		this.agentAlive = true;
-		this.tileWidth = options.tileSize;
-		this.tileHeight = options.tileSize;
-		this.radius = options.tileSize / 2;
+		this.tileWidth = tileWidth;
+		this.tileHeight = tileHeight;
+		this.radius = radius;
 		this.pointRandom = options.randomPlacement;
 		this.drawAllPoints = false;
 		this.useRadius = options.useRadius;
-		this.angle = random(0, Math.PI * 2);
+		this.angle = angle;
 		this.angleStep = Math.PI / 64;
 		// set middle point
 		this.location = createVector(
@@ -178,8 +199,8 @@ class Agent
 		else
 		{
 			points = createVector(
-				this.location.x,
-				this.location.y);
+				spawnX,
+				spawnY);
 		}
 
 		this.points[0] = points;

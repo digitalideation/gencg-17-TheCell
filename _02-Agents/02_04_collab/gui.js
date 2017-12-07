@@ -6,7 +6,8 @@ let options = {
 	agentFatness: 3,
 	// turnRadius: Math.PI/32,
 	timeToLive: 100,
-	tileSize: 150,
+	tileWidth: 150,
+	tileHeight: 150,
 	agentColor: [66, 230, 220], //RGB
 	backgroundColor: [0, 0, 0], //RGB
 	backgroundAlpha: 0, //RGB
@@ -64,9 +65,15 @@ window.onload = function()
 		.min(1)
 		.max(1000)
 		.step(1);
-	let tileSize = window
+	let tileWidth = window
 		.gui
-		.add(options, 'tileSize')
+		.add(options, 'tileWidth')
+		.min(50)
+		.max(1000)
+		.step(1);
+	let tileHeight = window
+		.gui
+		.add(options, 'tileHeight')
 		.min(50)
 		.max(1000)
 		.step(1);
@@ -81,7 +88,8 @@ window.onload = function()
 	controllers.push(agentFatness);
 	// controllers.push(turnRadius);
 	controllers.push(timeToLive);
-	controllers.push(tileSize);
+	controllers.push(tileWidth);
+	controllers.push(tileHeight);
 	// controllers.push(moveSpeed);
 	controllers.push(backgroundAlpha);
 	controllers.push(randomPlacement);
@@ -99,7 +107,8 @@ window.onload = function()
 
 	randomSeedOpt.onChange( resetAgents );
 	numberOfAgents.onChange( resetAgents );
-	tileSize.onChange( resetAgents );
+	tileHeight.onChange( resetAgents );
+	tileWidth.onChange( resetAgents );
 
 	function resetAgents ()
 	{
@@ -109,16 +118,16 @@ window.onload = function()
 
 		randomSeed(options.randomSeed);
 
-		for (let y = 0; y * options.tileSize < windowHeight; y++)
+		for (let y = 0; y * options.tileHeight < windowHeight; y++)
 		{
-			for(let x = 0; x * options.tileSize < windowWidth; x++)
+			for(let x = 0; x * options.tileWidth < windowWidth; x++)
 			{
 				let agent;
 				let startX;
 				let startY;
 
-				startX = x * options.tileSize + options.tileSize / 2;
-				startY = y * options.tileSize + options.tileSize / 2;
+				startX = x * options.tileWidth + options.tileWidth / 2;
+				startY = y * options.tileHeight + options.tileHeight / 2;
 				for (let i = 0; i < options.numberOfAgents; i++)
 				{
 					agent = new Agent(startX, startY);
