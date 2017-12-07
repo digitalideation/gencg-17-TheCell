@@ -16,31 +16,7 @@ function setup()
 
 	randomSeed(options.randomSeed);
 
-	for (let y = 0; y * options.tileHeight < windowHeight; y++)
-	{
-		for(let x = 0; x * options.tileWidth < windowWidth; x++)
-		{
-			let agent;
-			let startX;
-			let startY;
-
-			startX = x * options.tileWidth + options.tileWidth / 2;
-			startY = y * options.tileHeight + options.tileHeight / 2;
-			for (let i = 0; i < options.numberOfAgents; i++)
-			{
-				agent = new Agent(
-					startX,
-					startY,
-					startX,
-					startY,
-					random(0, Math.PI * 2),
-					2,
-					options.tileWidth,
-					options.tileHeight);
-				agents.push(agent);
-			}
-		}
-	}
+	spawnAgents();
 
 	background(options.backgroundColor, options.backgroundAlpha);
 }
@@ -155,6 +131,48 @@ function cleanDeadAgents(arrayWithAgents, returnObjects = false)
 	}
 }
 
+function spawnAgents()
+{
+	for (let y = 0; y * options.tileHeight < windowHeight; y++)
+	{
+		for(let x = 0; x * options.tileWidth < windowWidth; x++)
+		{
+			let agent;
+			let startX;
+			let startY;
+
+			startX = x * options.tileWidth + options.tileWidth / 2;
+			startY = y * options.tileHeight + options.tileHeight / 2;
+			for (let i = 0; i < options.numberOfAgents; i++)
+			{
+				agent = new Agent(
+					startX,
+					startY,
+					startX,
+					startY,
+					random(0, Math.PI * 2),
+					2,
+					options.tileWidth,
+					options.tileHeight);
+
+				// set tile on the left
+				if (x > 0)
+				{
+					let tileInfo = new Tileinformation(
+						(x - 1) * options.tileWidth + options.tileWidth / 2,
+						startY);
+					agent.setNeighbor(
+						Agent.neighborCell.LEFT,
+						tileInfo);
+				}
+
+				// push agent to array
+				agents.push(agent);
+			}
+		}
+	}
+}
+
 class Agent
 {
 	constructor(
@@ -179,6 +197,27 @@ class Agent
 		this.useRadius = options.useRadius;
 		this.angle = angle;
 		this.angleStep = Math.PI / 64;
+		this.sendToNeighbor = options.sendToNeighbor;
+		// this.neighborCells = {
+		// 	"topLeftCorner": {},
+		// 	"top": {},
+		// 	"toprightCorner": {},
+		// 	"middleLeft": {},
+		// 	"middleRight": {},
+		// 	"bottomLeftCorner": {},
+		// 	"bottom": {},
+		// 	"bottomRightCorner": {}
+		// }
+		this.neighborCells = [];
+		this.neighborCells[Agent.neighborCell.TOPLEFTCORNER] = {};
+		this.neighborCells[Agent.neighborCell.TOP] = {};
+		this.neighborCells[Agent.neighborCell.TOPRIGHTCORNER] = {};
+		this.neighborCells[Agent.neighborCell.LEFT] = {};
+		this.neighborCells[Agent.neighborCell.RIGHT] = {};
+		this.neighborCells[Agent.neighborCell.BOTTOMLEFTCORNER] = {};
+		this.neighborCells[Agent.neighborCell.BOTTOM] = {};
+		this.neighborCells[Agent.neighborCell.BOTTOMRIGHTCORNER] = {};
+
 		// set middle point
 		this.location = createVector(
 			middlePointX,
@@ -231,16 +270,6 @@ class Agent
 					this.points[this.points.length - 1].y);
 			}
 		}
-	}
-
-	incrementAngle()
-	{
-		this.angle += this.angleStep;
-	}
-
-	decrementAngle()
-	{
-		this.angle -= this.angleStep;
 	}
 
 	updateCycle()
@@ -429,6 +458,58 @@ class Agent
 
 		let newP = createVector(newX, newY);
 		this.points.push(newP);
+	}
+
+	incrementAngle()
+	{
+		this.angle += this.angleStep;
+	}
+
+	decrementAngle()
+	{
+		this.angle -= this.angleStep;
+	}
+
+	setNeighbor(neighborNumber, tileinformation)
+	{
+		this.neighborCells[neighborNumber] = tileinformation;
+	}
+
+	sendToNeighbor(neighborNumber, startX, startY)
+	{
+
+	}
+}
+
+/**
+ * NeighborCells Names
+ * @type {Integer}
+ */
+Agent.neighborCell = {
+	TOPLEFTCORNER: 0,
+	TOP: 1,
+	TOPRIGHTCORNER: 2,
+	LEFT: 3,
+	RIGHT: 4,
+	BOTTOMLEFTCORNER: 5,
+	BOTTOM: 6,
+	BOTTOMRIGHTCORNER: 7
+}
+
+class Tileinformation
+{
+	constructor(
+		centerX,
+		centerY,
+		tileWidth = options.tileWidth,
+		tileHeight = options.tileHeight,
+		radius = options.tileWidth / 2)
+	{
+		this.centerX = centerX,
+		this.centerY = centerY,
+		this.tileWidth = tileWidth;
+		this.tileHeight = tileHeight;
+		this.radius = radius;
 	}
 }
 

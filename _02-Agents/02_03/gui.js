@@ -13,6 +13,7 @@ let options = {
 	backgroundAlpha: 0, //RGB
 	randomPlacement: false, //RGB
 	useRadius: false, //RGB
+	sendToNeighbor: false, //RGB
 };
 
 window.somethingChanged = true;
@@ -83,6 +84,9 @@ window.onload = function()
 	let useRadius = window
 		.gui
 		.add(options, "useRadius");
+	let sendToNeighbor = window
+		.gui
+		.add(options, "sendToNeighbor");
 	controllers.push(randomSeedOpt);
 	controllers.push(numberOfAgents);
 	controllers.push(agentFatness);
@@ -94,6 +98,7 @@ window.onload = function()
 	controllers.push(backgroundAlpha);
 	controllers.push(randomPlacement);
 	controllers.push(useRadius);
+	controllers.push(sendToNeighbor);
 	controllers.push(window.gui.addColor(options, 'agentColor'));
 	controllers.push(window.gui.addColor(options, 'backgroundColor'));
 
@@ -118,22 +123,6 @@ window.onload = function()
 
 		randomSeed(options.randomSeed);
 
-		for (let y = 0; y * options.tileHeight < windowHeight; y++)
-		{
-			for(let x = 0; x * options.tileWidth < windowWidth; x++)
-			{
-				let agent;
-				let startX;
-				let startY;
-
-				startX = x * options.tileWidth + options.tileWidth / 2;
-				startY = y * options.tileHeight + options.tileHeight / 2;
-				for (let i = 0; i < options.numberOfAgents; i++)
-				{
-					agent = new Agent(startX, startY);
-					agents.push(agent);
-				}
-			}
-		}
+		spawnAgents();
 	}
 };
