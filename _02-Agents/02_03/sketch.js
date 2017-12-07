@@ -153,9 +153,9 @@ class Agent
 		this.tileWidth = options.tileSize;
 		this.tileHeight = options.tileSize;
 		this.radius = options.tileSize / 2;
-		this.pointRandom = false;
+		this.pointRandom = options.randomPlacement;
 		this.drawAllPoints = false;
-		this.useRadius = false;
+		this.useRadius = options.useRadius;
 		this.angle = random(0, Math.PI * 2);
 		this.angleStep = Math.PI / 64;
 		// set middle point
@@ -281,6 +281,9 @@ class Agent
 				{
 					this.decrementAngle();
 				}
+
+				// kill
+				this.agentAlive = false;
 
 				/*
 				if (this.angle > 0

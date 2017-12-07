@@ -7,9 +7,11 @@ let options = {
 	// turnRadius: Math.PI/32,
 	timeToLive: 100,
 	tileSize: 150,
-	agentColor: [0, 0, 0], //RGB
-	backgroundColor: [255, 255, 255], //RGB
+	agentColor: [66, 230, 220], //RGB
+	backgroundColor: [0, 0, 0], //RGB
 	backgroundAlpha: 0, //RGB
+	randomPlacement: false, //RGB
+	useRadius: false, //RGB
 };
 
 window.somethingChanged = true;
@@ -21,53 +23,59 @@ window.onload = function()
 	window.gui.closed = true;
 
 	let randomSeedOpt = window
-						.gui
-						.add(options, 'randomSeed')
-						.min(1)
-						.max(10000)
-						.step(1);
+		.gui
+		.add(options, 'randomSeed')
+		.min(1)
+		.max(10000)
+		.step(1);
 	let numberOfAgents = window
-						.gui
-						.add(options, 'numberOfAgents')
-						.min(1)
-						.max(10)
-						.step(1);
+		.gui
+		.add(options, 'numberOfAgents')
+		.min(1)
+		.max(10)
+		.step(1);
 	let agentFatness = window
-						.gui
-						.add(options, 'agentFatness')
-						.min(1)
-						.max(10)
-						.step(1);
+		.gui
+		.add(options, 'agentFatness')
+		.min(1)
+		.max(10)
+		.step(1);
 	let moveSpeed = window
-						.gui
-						.add(options, 'moveSpeed')
-						.min(1)
-						.max(5)
-						.step(0.1);
+		.gui
+		.add(options, 'moveSpeed')
+		.min(0.5)
+		.max(5)
+		.step(0.1);
 	let backgroundAlpha = window
-						.gui
-						.add(options, 'backgroundAlpha')
-						.min(1)
-						.max(100)
-						.step(1);
+		.gui
+		.add(options, 'backgroundAlpha')
+		.min(0)
+		.max(100)
+		.step(1);
 	// let turnRadius = window
-	// 					.gui
-	// 					.add(options, 'turnRadius')
-	// 					.min(0)
-	// 					.max(PI/2)
-	// 					.step(Math.PI/128);
+		// .gui
+		// .add(options, 'turnRadius')
+		// .min(0)
+		// .max(PI/2)
+		// .step(Math.PI/128);
 	let timeToLive = window
-						.gui
-						.add(options, 'timeToLive')
-						.min(1)
-						.max(1000)
-						.step(1);
+		.gui
+		.add(options, 'timeToLive')
+		.min(1)
+		.max(1000)
+		.step(1);
 	let tileSize = window
-						.gui
-						.add(options, 'tileSize')
-						.min(50)
-						.max(1000)
-						.step(1);
+		.gui
+		.add(options, 'tileSize')
+		.min(50)
+		.max(1000)
+		.step(1);
+	let randomPlacement = window
+		.gui
+		.add(options, "randomPlacement");
+	let useRadius = window
+		.gui
+		.add(options, "useRadius");
 	controllers.push(randomSeedOpt);
 	controllers.push(numberOfAgents);
 	controllers.push(agentFatness);
@@ -76,6 +84,8 @@ window.onload = function()
 	controllers.push(tileSize);
 	// controllers.push(moveSpeed);
 	controllers.push(backgroundAlpha);
+	controllers.push(randomPlacement);
+	controllers.push(useRadius);
 	controllers.push(window.gui.addColor(options, 'agentColor'));
 	controllers.push(window.gui.addColor(options, 'backgroundColor'));
 
