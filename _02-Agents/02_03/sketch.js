@@ -257,10 +257,10 @@ class Agent
 
 		if (this.useRadius)
 		{
-			if (
-				Math.pow(Math.abs(newX - this.location.x), 2)
-				+ Math.pow(Math.abs(newY - this.location.y), 2)
-				< Math.pow(this.radius, 2))
+			let aSquared = Math.pow(Math.abs(newX - this.location.x), 2);
+			let bSquared = Math.pow(Math.abs(newY - this.location.y), 2);
+			let cSquared = Math.pow(this.radius, 2);
+			if (aSquared + bSquared < cSquared)
 			{
 				// all normal
 			}
