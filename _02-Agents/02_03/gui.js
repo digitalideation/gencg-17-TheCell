@@ -1,13 +1,13 @@
 let options = {
 	randomSeed: 2018,
-	numberOfAgents: 10,
+	numberOfAgents: 1,
 	moveSpeed: 2,
 	// maxSpeed: 5,
 	agentFatness: 3,
 	// turnRadius: Math.PI/32,
 	timeToLive: 100,
-	tileWidth: 150,
-	tileHeight: 150,
+	tileWidth: 200,
+	tileHeight: 200,
 	agentColor: [66, 230, 220], //RGB
 	backgroundColor: [0, 0, 0], //RGB
 	backgroundAlpha: 0, //RGB

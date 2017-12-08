@@ -54,6 +54,7 @@ function draw()
 				2,
 				options.tileWidth,
 				options.tileHeight);
+			agent.neighborCells = element.neighborCells;
 			agents.push(agent);
 		});
 
@@ -155,6 +156,7 @@ function spawnAgents()
 					options.tileWidth,
 					options.tileHeight);
 
+				// set tile infos
 				// set tile on the left
 				if (x > 0)
 				{
@@ -162,9 +164,90 @@ function spawnAgents()
 						(x - 1) * options.tileWidth + options.tileWidth / 2,
 						startY);
 					agent.setNeighbor(
-						Agent.neighborCell.LEFT,
+						Agent.surroundingCellEnum.LEFT,
 						tileInfo);
 				}
+
+				// set tile on top
+				if (y > 0)
+				{
+					let tileInfo = new Tileinformation(
+						startX,
+						(y - 1) * options.tileHeight + options.tileHeight / 2);
+					agent.setNeighbor(
+						Agent.surroundingCellEnum.TOP,
+						tileInfo);
+				}
+
+				// set right neighbor
+				if ((x + 1) * options.tileWidth < windowWidth)
+				{
+					let tileInfo = new Tileinformation(
+						(x + 1) * options.tileWidth + options.tileWidth / 2,
+						startY);
+					agent.setNeighbor(
+						Agent.surroundingCellEnum.RIGHT,
+						tileInfo);
+				}
+
+				// set bottom neighbor
+				if ((y + 1) * options.tileHeight < windowHeight)
+				{
+					let tileInfo = new Tileinformation(
+						(y + 1) * options.tileHeight + options.tileHeight / 2,
+						startY);
+					agent.setNeighbor(
+						Agent.surroundingCellEnum.BOTTOM,
+						tileInfo);
+				}
+
+				// set tile on the top left corner
+				if (x > 0 && y > 0)
+				{
+					let tileInfo = new Tileinformation(
+						(x - 1) * options.tileWidth + options.tileWidth / 2,
+						(y - 1) * options.tileHeight + options.tileHeight / 2);
+					agent.setNeighbor(
+						Agent.surroundingCellEnum.TOPLEFTCORNER,
+						tileInfo);
+				}
+
+				// set tile on the top right corner
+				if (((x + 1) * options.tileWidth < windowWidth)
+					&& ((y - 1) * options.tileHeight < windowHeight))
+				{
+					let tileInfo = new Tileinformation(
+						(x + 1) * options.tileWidth + options.tileWidth / 2,
+						(y - 1) * options.tileHeight + options.tileHeight / 2);
+					agent.setNeighbor(
+						Agent.surroundingCellEnum.TOPRIGHTCORNER,
+						tileInfo);
+				}
+
+				// set tile on the bottom right corner
+				if (((x + 1) * options.tileWidth < windowWidth)
+					&& ((y + 1) * options.tileHeight < windowHeight))
+				{
+					let tileInfo = new Tileinformation(
+						(x + 1) * options.tileWidth + options.tileWidth / 2,
+						(y + 1) * options.tileHeight + options.tileHeight / 2);
+					agent.setNeighbor(
+						Agent.surroundingCellEnum.BOTTOMRIGHTCORNER,
+						tileInfo);
+				}
+
+				// set tile on the bottom left corner
+				if (((x - 1) * options.tileWidth < windowWidth)
+					&& ((y + 1) * options.tileHeight < windowHeight))
+				{
+					let tileInfo = new Tileinformation(
+						(x - 1) * options.tileWidth + options.tileWidth / 2,
+						(y + 1) * options.tileHeight + options.tileHeight / 2);
+					agent.setNeighbor(
+						Agent.surroundingCellEnum.BOTTOMLEFTCORNER,
+						tileInfo);
+				}
+
 
 				// push agent to array
 				agents.push(agent);
@@ -209,14 +292,19 @@ class Agent
 		// 	"bottomRightCorner": {}
 		// }
 		this.neighborCells = [];
-		this.neighborCells[Agent.neighborCell.TOPLEFTCORNER] = {};
-		this.neighborCells[Agent.neighborCell.TOP] = {};
-		this.neighborCells[Agent.neighborCell.TOPRIGHTCORNER] = {};
-		this.neighborCells[Agent.neighborCell.LEFT] = {};
-		this.neighborCells[Agent.neighborCell.RIGHT] = {};
-		this.neighborCells[Agent.neighborCell.BOTTOMLEFTCORNER] = {};
-		this.neighborCells[Agent.neighborCell.BOTTOM] = {};
-		this.neighborCells[Agent.neighborCell.BOTTOMRIGHTCORNER] = {};
+		this.neighborCells[Agent.surroundingCellEnum.TOPLEFTCORNER] = {};
+		this.neighborCells[Agent.surroundingCellEnum.TOP] = {};
+		this.neighborCells[Agent.surroundingCellEnum.TOPRIGHTCORNER] = {};
+		this.neighborCells[Agent.surroundingCellEnum.LEFT] = {};
+		this.neighborCells[Agent.surroundingCellEnum.RIGHT] = {};
+		this.neighborCells[Agent.surroundingCellEnum.BOTTOMLEFTCORNER] = {};
+		this.neighborCells[Agent.surroundingCellEnum.BOTTOM] = {};
+		this.neighborCells[Agent.surroundingCellEnum.BOTTOMRIGHTCORNER] = {};
+
+		this.hitTop = false;
+		this.hitRight = false;
+		this.hitBottom = false;
+		this.hitLeft = false;
 
 		// set middle point
 		this.location = createVector(
@@ -289,8 +377,8 @@ class Agent
 			this.angle = this.angle + this.angleStep;
 		}
 		else if (
-			sin(this.angle) < 0.1
-			&& sin(this.angle) > -0.1
+			sin(this.angle) < 0.01
+			&& sin(this.angle) > -0.01
 			&& ((this.points[this.points.length - 1].x
 				>= this.location.x + this.tileWidth / 2)
 				|| (this.points[this.points.length - 1].x
@@ -427,6 +515,10 @@ class Agent
 			else if (newX > (this.location.x + this.tileWidth / 2))
 			{
 				newX = this.location.x + this.tileWidth / 2;
+				this.hitRight = true;
+				// sendToNeighbor(
+				// 	newX,
+				// 	newY);
 			}
 
 			if (newY < (this.location.y - this.tileHeight / 2))
@@ -452,7 +544,7 @@ class Agent
 				|| inTopRightCorner
 				|| inBottomLeftCorner)
 			{
-				this.agentAlive = false;
+				// this.agentAlive = false;
 			}
 		}
 
@@ -475,8 +567,53 @@ class Agent
 		this.neighborCells[neighborNumber] = tileinformation;
 	}
 
-	sendToNeighbor(neighborNumber, startX, startY)
+	sendToNeighbor(startX, startY)
 	{
+		// TODO
+		// TODO later: break this apart for exchangable neighbors
+		if (this.hitTop && this.hitRight)
+		{
+			// top right corner
+		}
+		else if (this.hitBottom && this.hitRight)
+		{
+			// bottom right corner
+		}
+		else if (this.hitBottom && this.hitLeft)
+		{
+			// bottom left corner
+		}
+		else if (this.hitTop && this.hitLeft)
+		{
+			// top left corner
+		}
+		else if (this.hitTop)
+		{
+			// Top
+		}
+		else if (this.hitRight)
+		{
+			// Right
+			let agent = new Agent(
+				this.neighborCells[Agent.surroundingCellEnum.RIGHT].centerX,
+				this.neighborCells[Agent.surroundingCellEnum.RIGHT].centerY,
+				startX,
+				startY,
+				angle = this.angle,
+				moveSpeed = this.moveSpeed,
+				tileWidth = this.tileWidth,
+				tileHeight = this.tileHeight,
+				radius = this.radius)
+			agents.push(agent);
+		}
+		else if (this.hitBottom)
+		{
+			// Bottom
+		}
+		else if (this.hitLeft)
+		{
+			// Left
+		}
 
 	}
 }
@@ -485,7 +622,7 @@ class Agent
  * NeighborCells Names
  * @type {Integer}
  */
-Agent.neighborCell = {
+Agent.surroundingCellEnum = {
 	TOPLEFTCORNER: 0,
 	TOP: 1,
 	TOPRIGHTCORNER: 2,
