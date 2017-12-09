@@ -6,8 +6,10 @@ let options = {
 	agentFatness: 3,
 	// turnRadius: Math.PI/32,
 	timeToLive: 100,
-	tileWidth: 200,
-	tileHeight: 200,
+	// tileWidth: 200,
+	// tileHeight: 200,
+	tileWidth: 192,
+	tileHeight: 151,
 	agentColor: [66, 230, 220], //RGB
 	backgroundColor: [0, 0, 0], //RGB
 	backgroundAlpha: 0, //RGB

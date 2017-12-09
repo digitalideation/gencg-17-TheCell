@@ -43,19 +43,19 @@ function draw()
 		let amountKilled = cleanDeadAgents(agents, true);
 		amountKilled.forEach( function (element, index, arr)
 		{
-			let agent;
+			// let agent;
 
-			agent = new Agent(
-				element.location.x,
-				element.location.y,
-				element.location.x,
-				element.location.y,
-				random(0, Math.PI * 2),
-				2,
-				options.tileWidth,
-				options.tileHeight);
-			agent.neighborCells = element.neighborCells;
-			agents.push(agent);
+			// agent = new Agent(
+			// 	element.location.x,
+			// 	element.location.y,
+			// 	element.location.x,
+			// 	element.location.y,
+			// 	random(0, Math.PI * 2),
+			// 	2,
+			// 	options.tileWidth,
+			// 	options.tileHeight);
+			// agent.neighborCells = element.neighborCells;
+			// agents.push(agent);
 		});
 
 		window.somethingChanged = false;
@@ -194,8 +194,8 @@ function spawnAgents()
 				if ((y + 1) * options.tileHeight < windowHeight)
 				{
 					let tileInfo = new Tileinformation(
-						(y + 1) * options.tileHeight + options.tileHeight / 2,
-						startY);
+						startX,
+						(y + 1) * options.tileHeight + options.tileHeight / 2);
 					agent.setNeighbor(
 						Agent.surroundingCellEnum.BOTTOM,
 						tileInfo);
@@ -247,7 +247,6 @@ function spawnAgents()
 						Agent.surroundingCellEnum.BOTTOMLEFTCORNER,
 						tileInfo);
 				}
-
 
 				// push agent to array
 				agents.push(agent);
@@ -511,41 +510,54 @@ class Agent
 			if (newX < (this.location.x - this.tileWidth / 2))
 			{
 				newX = this.location.x - this.tileWidth / 2;
+				this.hitLeft = true;
 			}
 			else if (newX > (this.location.x + this.tileWidth / 2))
 			{
 				newX = this.location.x + this.tileWidth / 2;
 				this.hitRight = true;
-				// sendToNeighbor(
-				// 	newX,
-				// 	newY);
 			}
 
+			// top local Border
 			if (newY < (this.location.y - this.tileHeight / 2))
 			{
 				newY = this.location.y - this.tileHeight / 2;
+				this.hitTop = true;
 			}
 			else if (newY > (this.location.y + this.tileHeight / 2))
 			{
 				newY = this.location.y + this.tileHeight / 2;
+				this.hitBottom = true;
 			}
 
-			let inTopLeftCorner = (newX <= this.location.x - this.tileWidth / 2
-				&& newY <= this.location.y - this.tileHeight / 2);
-			let inBottomRightCorner = (newX >= this.location.x + this.tileWidth / 2
-				&& newY >= this.location.y + this.tileHeight / 2);
-			let inTopRightCorner = (newX >= this.location.x + this.tileWidth / 2
-				&& newY <= this.location.y - this.tileHeight / 2);
-			let inBottomLeftCorner = (newX <= this.location.x - this.tileWidth / 2
-				&& newY >= this.location.y + this.tileHeight / 2);
+			// let inTopLeftCorner = (
+			// 	newX <= this.location.x - this.tileWidth / 2
+			// 	&& newY <= this.location.y - this.tileHeight / 2);
+			// let inBottomRightCorner = (
+			// 	newX >= this.location.x + this.tileWidth / 2
+			// 	&& newY >= this.location.y + this.tileHeight / 2);
+			// let inTopRightCorner = (
+			// 	newX >= this.location.x + this.tileWidth / 2
+			// 	&& newY <= this.location.y - this.tileHeight / 2);
+			// let inBottomLeftCorner = (
+			// 	newX <= this.location.x - this.tileWidth / 2
+			// 	&& newY >= this.location.y + this.tileHeight / 2);
+			// if (inTopLeftCorner
+			// 	|| inBottomRightCorner
+			// 	|| inTopRightCorner
+			// 	|| inBottomLeftCorner)
+			// {
+			// 	// this.agentAlive = false;
+			// }
 
-			if (inTopLeftCorner
-				|| inBottomRightCorner
-				|| inTopRightCorner
-				|| inBottomLeftCorner)
+			if (this.hitTop
+				|| this.hitBottom
+				|| this.hitLeft
+				|| this.hitRight)
 			{
-				// this.agentAlive = false;
+				this.sendToNeighborCell(newX, newY);
 			}
+
 		}
 
 		let newP = createVector(newX, newY);
@@ -567,53 +579,116 @@ class Agent
 		this.neighborCells[neighborNumber] = tileinformation;
 	}
 
-	sendToNeighbor(startX, startY)
+	sendToNeighborCell(startX, startY)
 	{
+		let cellinformation;
+
 		// TODO
 		// TODO later: break this apart for exchangable neighbors
 		if (this.hitTop && this.hitRight)
 		{
 			// top right corner
+			cellinformation = this
+				.neighborCells[Agent.surroundingCellEnum.TOPRIGHTCORNER];
 		}
 		else if (this.hitBottom && this.hitRight)
 		{
 			// bottom right corner
+			cellinformation = this
+				.neighborCells[Agent.surroundingCellEnum.BOTTOMRIGHTCORNER];
 		}
 		else if (this.hitBottom && this.hitLeft)
 		{
 			// bottom left corner
+			cellinformation = this
+				.neighborCells[Agent.surroundingCellEnum.BOTTOMLEFTCORNER];
 		}
 		else if (this.hitTop && this.hitLeft)
 		{
 			// top left corner
+			cellinformation = this
+				.neighborCells[Agent.surroundingCellEnum.TOPLEFTCORNER];
 		}
 		else if (this.hitTop)
 		{
 			// Top
+			cellinformation = this
+				.neighborCells[Agent.surroundingCellEnum.TOP];
 		}
 		else if (this.hitRight)
 		{
 			// Right
-			let agent = new Agent(
-				this.neighborCells[Agent.surroundingCellEnum.RIGHT].centerX,
-				this.neighborCells[Agent.surroundingCellEnum.RIGHT].centerY,
-				startX,
-				startY,
-				angle = this.angle,
-				moveSpeed = this.moveSpeed,
-				tileWidth = this.tileWidth,
-				tileHeight = this.tileHeight,
-				radius = this.radius)
-			agents.push(agent);
+			cellinformation = this
+				.neighborCells[Agent.surroundingCellEnum.RIGHT];
 		}
 		else if (this.hitBottom)
 		{
 			// Bottom
+			cellinformation = this
+				.neighborCells[Agent.surroundingCellEnum.BOTTOM];
+			console.log("hitBottom", this.location, cellinformation);
 		}
 		else if (this.hitLeft)
 		{
 			// Left
+			cellinformation = this
+				.neighborCells[Agent.surroundingCellEnum.LEFT];
 		}
+
+		if (cellinformation.centerX
+			&& cellinformation.centerY
+			&& cellinformation.tileWidth
+			&& cellinformation.tileHeight
+			&& cellinformation.radius)
+		{
+			let agent = new Agent(
+				cellinformation.centerX,
+				cellinformation.centerY,
+				startX,
+				startY,
+				this.angle,
+				this.moveSpeed,
+				cellinformation.tileWidth,
+				cellinformation.tileHeight,
+				cellinformation.radius);
+
+			// check for borders and update all neighborcells
+			
+			if (this.location.x > options.tileWidth)
+			{
+				// agent.neighborCells = this.neighborCells;
+				agent.neighborCells[Agent.surroundingCellEnum.LEFT] =
+					new Tileinformation(
+						this.location.x - this.tileWidth,
+						this.location.y,
+						this.tileWidth,
+						this.tileHeight,
+						this.radius);
+			}
+			else
+			{
+				// agent.neighborCells = this.neighborCells;
+				agent.neighborCells[Agent.surroundingCellEnum.LEFT] = {};
+			}
+
+			if (this.location.x < windowWidth - options.tileWidth)
+			{
+				agent.neighborCells[Agent.surroundingCellEnum.RIGHT] = 
+					new Tileinformation(
+						this.location.x + this.tileWidth,
+						this.location.y,
+						this.tileWidth,
+						this.tileHeight,
+						this.radius);
+			}
+			else
+			{
+				agent.neighborCells[Agent.surroundingCellEnum.RIGHT] = {};
+			}
+			agents.push(agent);
+		}
+
+		this.agentAlive = false;
 
 	}
 }
