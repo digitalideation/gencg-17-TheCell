@@ -8,14 +8,16 @@ let options = {
 	timeToLive: 100,
 	// tileWidth: 200,
 	// tileHeight: 200,
-	tileWidth: 192,
-	tileHeight: 151,
+	tileWidth: 150,
+	tileHeight: 150,
 	agentColor: [66, 230, 220], //RGB
 	backgroundColor: [0, 0, 0], //RGB
-	backgroundAlpha: 0, //RGB
-	randomPlacement: false, //RGB
-	useRadius: false, //RGB
-	sendToNeighbor: false, //RGB
+	backgroundAlpha: 0, //0 - 100
+	randomPlacement: false,
+	useRadius: false,
+	sendToNeighbor: true,
+	bounceOffWindowBorder: true,
+	bounceOffLocalBorder: false,
 };
 
 window.somethingChanged = true;
@@ -89,6 +91,12 @@ window.onload = function()
 	let sendToNeighbor = window
 		.gui
 		.add(options, "sendToNeighbor");
+	let bounceOffWindowBorder = window
+		.gui
+		.add(options, "bounceOffWindowBorder");
+	let bounceOffLocalBorder = window
+		.gui
+		.add(options, "bounceOffLocalBorder");
 	controllers.push(randomSeedOpt);
 	controllers.push(numberOfAgents);
 	controllers.push(agentFatness);
@@ -101,6 +109,8 @@ window.onload = function()
 	controllers.push(randomPlacement);
 	controllers.push(useRadius);
 	controllers.push(sendToNeighbor);
+	controllers.push(bounceOffWindowBorder);
+	controllers.push(bounceOffLocalBorder);
 	controllers.push(window.gui.addColor(options, 'agentColor'));
 	controllers.push(window.gui.addColor(options, 'backgroundColor'));
 
