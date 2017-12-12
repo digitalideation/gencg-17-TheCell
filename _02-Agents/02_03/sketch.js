@@ -279,15 +279,15 @@ class Agent
 		this.drawAllPoints = false;
 		this.useRadius = options.useRadius;
 		this.angle = angle;
+		this.angleStep = Math.PI / 64;
 		// this.angle = Math.PI / 2 + 0.03;
 		// this.angle = Math.PI + 0.03;
 		// this.angle = Math.PI * 3/2 + 0.03;
 		// this.angle = 0 + 0.03;
 		// this.angle = Math.PI / 4;
 		// this.angle = Math.PI * 3/4;
-		this.angle = 0 - Math.PI * 1/4;
-		this.angleStep = Math.PI / 64;
-		this.sendToNeighbor = options.sendToNeighbor;
+		// this.angle = 0 - Math.PI * 1/4;
+		// this.sendToNeighbor = options.sendToNeighbor;
 
 		// set sendToNeighbor properties
 		this.neighborCells = [];
@@ -345,7 +345,7 @@ class Agent
 		}
 
 		// draw debug border
-		if (true)
+		if (false)
 		{
 			stroke(color([150, 150, 150]));
 			strokeWeight(1);
@@ -400,7 +400,7 @@ class Agent
 
 		// only change blocked Agents angle if they are not send to neighbors
 		// and should not bounce
-		if (!this.sendToNeighbor && !options.bounceOffLocalBorder)
+		if (!options.sendToNeighbor && !options.bounceOffLocalBorder)
 		{
 			if (
 				cos(this.angle) < 0.01
@@ -533,27 +533,8 @@ class Agent
 		}
 		else
 		{
-			// left local border
-			if (options.bounceOffLocalBorder)
+			if (!options.sendToNeighbor && !options.bounceOffLocalBorder)
 			{
-				// Todo
-			}
-			else
-			{
-				// if wall is hit
-				if (this.sendToNeighbor &&
-					(this.hitTop
-					|| this.hitBottom
-					|| this.hitLeft
-					|| this.hitRight)
-					&& !(this.hitTopWindowBorder
-						|| this.hitRightWindowBorder
-						|| this.hitBottomWindowBorder
-						|| this.hitLeftWindowBorder))
-				{
-					this.sendToNeighborCell(newX, newY);
-				}
-
 				// reset Position if local Border is met
 				if (this.hitLeft)
 				{
@@ -574,6 +555,56 @@ class Agent
 					newY = this.location.y + this.tileHeight / 2;
 				}
 			}
+			else if (!options.sendToNeighbor && options.bounceOffLocalBorder)
+			{
+				// reset Position if local Border is met
+				if (this.hitLeft)
+				{
+					newX = this.location.x - this.tileWidth / 2;
+				}
+				else if (this.hitRight)
+				{
+					newX = this.location.x + this.tileWidth / 2;
+				}
+
+				// top local Border
+				if (this.hitTop)
+				{
+					newY = this.location.y - this.tileHeight / 2;
+				}
+				else if (this.hitBottom)
+				{
+					newY = this.location.y + this.tileHeight / 2;
+				}
+			}
+			else if (options.sendToNeighbor)
+			{
+				// if wall is hit
+				// if (this.sendToNeighbor &&
+				// 	(this.hitTop
+				// 	|| this.hitBottom
+				// 	|| this.hitLeft
+				// 	|| this.hitRight)
+				// 	&& !(this.hitTopWindowBorder
+				// 		|| this.hitRightWindowBorder
+				// 		|| this.hitBottomWindowBorder
+				// 		|| this.hitLeftWindowBorder))
+				// {
+				// 	this.sendToNeighborCell(newX, newY);
+				// }
+				// if wall is hit
+				if ((this.hitTop
+					|| this.hitBottom
+					|| this.hitLeft
+					|| this.hitRight)
+					&& !(this.hitTopWindowBorder
+						|| this.hitRightWindowBorder
+						|| this.hitBottomWindowBorder
+						|| this.hitLeftWindowBorder))
+				{
+					this.sendToNeighborCell(newX, newY);
+				}
+			}
 
 			// if (this.angle >= 0 && this.angle < Math.PI / 2)
 			// {
@@ -591,6 +622,8 @@ class Agent
 			// {
 			// 	// top right direction
 			// }
+
+			this.customBehaviour();
 		}
 
 		let newP = createVector(newX, newY);
@@ -615,7 +648,6 @@ class Agent
 	sendToNeighborCell(startX, startY)
 	{
 		let cellinformation;
-
 		// TODO
 		// TODO later: break this apart for exchangable neighbors
 		if (this.hitTop && this.hitRight)
@@ -798,7 +830,7 @@ class Agent
 
 		if (this.useRadius)
 		{
-
+			// TODO
 		}
 		else
 		{
@@ -865,7 +897,7 @@ class Agent
 			}
 		}
 
-		if (this.sendToNeighbor)
+		if (options.sendToNeighbor)
 		{
 			return;
 		}
@@ -923,6 +955,11 @@ class Agent
 				this.angle = random(0, Math.PI / 2);
 			}
 		}
+	}
+
+	customBehaviour()
+	{
+		// Agent custom behaviour comes here
 	}
 }
 
