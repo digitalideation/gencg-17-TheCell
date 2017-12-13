@@ -146,7 +146,7 @@ function spawnAgents()
 			startY = y * options.tileHeight + options.tileHeight / 2;
 			for (let i = 0; i < options.numberOfAgents; i++)
 			{
-				agent = new Agent(
+				agent = new ExampleAgent(
 					startX,
 					startY,
 					startX,
@@ -345,7 +345,7 @@ class Agent
 		}
 
 		// draw debug border
-		if (false)
+		if (window.debugMode)
 		{
 			stroke(color([150, 150, 150]));
 			strokeWeight(1);

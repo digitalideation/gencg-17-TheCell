@@ -19,8 +19,14 @@
   <link rel="stylesheet" href="../../css/main.css" type="text/css">
 
   <script src="/js/dat.gui.min.js"></script>
+
+  <!--
   <script src="gui.js"></script>
   <script src="sketch.js"></script>
+  -->
+  {% for include in page.includes %}
+    <script type="text/javascript" src="{{ include.src }}"></script>
+  {% endfor %}
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
