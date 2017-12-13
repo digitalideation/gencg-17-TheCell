@@ -1,6 +1,6 @@
 let options = {
 	randomSeed: 2018,
-	numberOfAgents: 1,
+	numberOfAgents: 30,
 	moveSpeed: 2,
 	// maxSpeed: 5,
 	agentFatness: 3,
@@ -15,8 +15,8 @@ let options = {
 	backgroundAlpha: 0, //0 - 100
 	randomPlacement: false,
 	useRadius: false,
-	sendToNeighbor: true,
-	bounceOffWindowBorder: true,
+	sendToNeighbor: false,
+	bounceOffWindowBorder: false,
 	bounceOffLocalBorder: false,
 };
 
