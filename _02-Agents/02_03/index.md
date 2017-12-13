@@ -4,11 +4,10 @@ title: "tiled spreadout"
 category: "Experiment"
 thumb_name: "thumb.jpg"
 includes:
-	- src: "gui.js"
-	- src: "MasterAgent.js"
-	- src: "ExampleAgent.js"
-	- src: "sketch.js"
-
+  - src: "gui.js"
+  - src: "MasterAgent.js"
+  - src: "ExampleAgent.js"
+  - src: "sketch.js"
 ---
 
 <!--
