@@ -3,6 +3,9 @@ layout: sketch
 title: "Square park"
 category: "Experiment"
 thumb_name: "thumb.jpg"
+includes:
+  - src: "gui.js"
+  - src: "sketch.js"
 ---
 
 <!--

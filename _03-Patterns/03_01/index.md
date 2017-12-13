@@ -4,8 +4,8 @@ title: "holes in the fabric"
 category: "Experiment"
 thumb_name: "thumb.PNG"
 includes:
-	- src: "gui.js"
-	- src: "sketch.js"
+  - src: "gui.js"
+  - src: "sketch.js"
 ---
 
 <!--
