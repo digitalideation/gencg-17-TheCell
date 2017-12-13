@@ -1,18 +1,23 @@
 let options = {
 	randomSeed: 2018,
-	numberOfAgents: 10,
+	numberOfAgents: 1,
 	moveSpeed: 2,
 	// maxSpeed: 5,
 	agentFatness: 3,
 	// turnRadius: Math.PI/32,
 	timeToLive: 100,
+	// tileWidth: 200,
+	// tileHeight: 200,
 	tileWidth: 150,
 	tileHeight: 150,
 	agentColor: [66, 230, 220], //RGB
 	backgroundColor: [0, 0, 0], //RGB
-	backgroundAlpha: 0, //RGB
-	randomPlacement: false, //RGB
-	useRadius: false, //RGB
+	backgroundAlpha: 0, //0 - 100
+	randomPlacement: false,
+	useRadius: false,
+	sendToNeighbor: true,
+	bounceOffWindowBorder: true,
+	bounceOffLocalBorder: false,
 };
 
 window.somethingChanged = true;
@@ -83,6 +88,15 @@ window.onload = function()
 	let useRadius = window
 		.gui
 		.add(options, "useRadius");
+	let sendToNeighbor = window
+		.gui
+		.add(options, "sendToNeighbor");
+	let bounceOffWindowBorder = window
+		.gui
+		.add(options, "bounceOffWindowBorder");
+	let bounceOffLocalBorder = window
+		.gui
+		.add(options, "bounceOffLocalBorder");
 	controllers.push(randomSeedOpt);
 	controllers.push(numberOfAgents);
 	controllers.push(agentFatness);
@@ -94,6 +108,9 @@ window.onload = function()
 	controllers.push(backgroundAlpha);
 	controllers.push(randomPlacement);
 	controllers.push(useRadius);
+	controllers.push(sendToNeighbor);
+	controllers.push(bounceOffWindowBorder);
+	controllers.push(bounceOffLocalBorder);
 	controllers.push(window.gui.addColor(options, 'agentColor'));
 	controllers.push(window.gui.addColor(options, 'backgroundColor'));
 
@@ -118,22 +135,6 @@ window.onload = function()
 
 		randomSeed(options.randomSeed);
 
-		for (let y = 0; y * options.tileHeight < windowHeight; y++)
-		{
-			for(let x = 0; x * options.tileWidth < windowWidth; x++)
-			{
-				let agent;
-				let startX;
-				let startY;
-
-				startX = x * options.tileWidth + options.tileWidth / 2;
-				startY = y * options.tileHeight + options.tileHeight / 2;
-				for (let i = 0; i < options.numberOfAgents; i++)
-				{
-					agent = new Agent(startX, startY);
-					agents.push(agent);
-				}
-			}
-		}
+		spawnAgents();
 	}
 };
