@@ -105,21 +105,21 @@ class RectangleAgent extends MasterAgent
 			// reset Position if local Border is met
 			if (this.hitLeft)
 			{
-				newX = this.positionX - this.tileWidth / 2;
+				newX = this.location.x - this.tileWidth / 2;
 			}
 			else if (this.hitRight)
 			{
-				newX = this.positionX + this.tileWidth / 2;
+				newX = this.location.x - this.width + this.tileWidth / 2;
 			}
 
 			// top local Border
 			if (this.hitTop)
 			{
-				newY = this.positionY - this.tileHeight / 2;
+				newY = this.location.y - this.tileHeight / 2;
 			}
 			else if (this.hitBottom)
 			{
-				newY = this.positionY + this.tileHeight / 2;
+				newY = this.location.y - this.height + this.tileHeight / 2;
 			}
 		}
 		else if (!options.sendToNeighbor && options.bounceOffLocalBorder)
@@ -127,21 +127,21 @@ class RectangleAgent extends MasterAgent
 			// reset Position if local Border is met
 			if (this.hitLeft)
 			{
-				newX = this.positionX - this.tileWidth / 2;
+				newX = this.location.x - this.tileWidth / 2;
 			}
 			else if (this.hitRight)
 			{
-				newX = this.positionX + this.tileWidth / 2;
+				newX = this.location.x - this.width + this.tileWidth / 2;
 			}
 
 			// top local Border
 			if (this.hitTop)
 			{
-				newY = this.positionY - this.tileHeight / 2;
+				newY = this.location.y - this.tileHeight / 2;
 			}
 			else if (this.hitBottom)
 			{
-				newY = this.positionY + this.tileHeight / 2;
+				newY = this.location.y - this.height + this.tileHeight / 2;
 			}
 		}
 		else if (options.sendToNeighbor)
@@ -313,10 +313,6 @@ class RectangleAgent extends MasterAgent
 			{
 				this.vector.y *= -1;
 				this.vector.x *= -1;
-			}
-			if (this.hitBottom)
-			{
-				this.vector.y *= -1;
 			}
 			if (this.hitLeft && this.hitTop)
 			{
