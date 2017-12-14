@@ -25,6 +25,8 @@ class RectangleAgent extends MasterAgent
 		this.length = moveSpeed*0.1;
 		this.width = random(3,tileWidth/10);
 		this.height = random(3,tileHeight/10);
+		RectangleAgent.id++;
+		this.id = RectangleAgent.id;
 		//this.points = [];
 		//this.angleStep = Math.PI / 64;
 
@@ -517,3 +519,4 @@ class RectangleAgent extends MasterAgent
 		// Agent custom behaviour comes here
 	}
 }
+RectangleAgent.id = 0;
