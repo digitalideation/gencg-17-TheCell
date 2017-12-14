@@ -22,8 +22,6 @@ class RectangleAgent extends MasterAgent
 		this.positionX = spawnX;
 		this.positionY = spawnY;
 		this.vector = this.vectorFromAngle(angle);
-		//console.log(this.id+" :"+this.angle+"      VECTOR:"+this.vector);
-		//this.length = moveSpeed*0.1;
 		this.width = random(3,tileWidth/10);
 		this.height = random(3,tileHeight/10);
 		RectangleAgent.id++;
@@ -55,50 +53,9 @@ class RectangleAgent extends MasterAgent
 
 		let newX;
 		let newY;
-		/*
-		// only change blocked Agents angle if they are not send to neighbors
-		// and should not bounce
-		if (!options.sendToNeighbor && !options.bounceOffLocalBorder)
-		{
-			if (
-				cos(this.angle) < 0.01
-				&& cos(this.angle) > -0.01
-				&& ((this.points[this.points.length - 1].y
-					>= this.location.y + this.tileHeight / 2)
-					|| (this.points[this.points.length - 1].y
-					<= this.location.y - this.tileHeight / 2)))
-			{
-				// check if it is at the top or bottom middle and speed it up a bit
-				this.incrementAngle();
-			}
-			else if (
-				sin(this.angle) < 0.01
-				&& sin(this.angle) > -0.01
-				&& ((this.points[this.points.length - 1].x
-					>= this.location.x + this.tileWidth / 2)
-					|| (this.points[this.points.length - 1].x
-					<= this.location.x - this.tileWidth / 2)))
-			{
-				// check if it is at the left or right middle and speed it up a bit
-				this.incrementAngle();
-			}
-		}*/
-	/*	this.positionX += this.vector.x*this.length;
-		this.positionY += this.vector.y*this.length;
-		RectangleAgent.collisionPointsArray.push({id:this.id,x:this.positionX,y:this.positionY,width:this.width,height:this.height,vector:this.vector.copy()});
-	*/
+
 		newX = this.positionX+this.vector.x*options.moveSpeed*0.5;
 		newY = this.positionY+this.vector.y*options.moveSpeed*0.5;
-		RectangleAgent.collisionPointsArray.push({id:this.id,x:this.positionX,y:this.positionY,width:this.width,height:this.height,vector:this.vector.copy()});
-
-	/* 	newX = this.points[this.points.length - 1].x
-			+ (cos(this.angle) * this.moveSpeed);
-		newY = this.points[this.points.length - 1].y
-			+ (sin(this.angle) * this.moveSpeed);
-	*/
-		// this must be after new positions checked
-		// otherwise agents spawned in new tiles
-		// will always hit borders at the start
 		this.checkBorders(newX, newY);
 		this.changeAngleBasedOnBorders();
 
@@ -345,4 +302,3 @@ class RectangleAgent extends MasterAgent
 	}
 }
 RectangleAgent.id = 0;
-RectangleAgent.collisionPointsArray = [];
