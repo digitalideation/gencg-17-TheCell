@@ -1,6 +1,6 @@
 ---
 layout: sketch
-title: "multiagents"
+title: "multiagents Snapshot"
 category: "Experiment"
 thumb_name: "thumb.jpg"
 includes:

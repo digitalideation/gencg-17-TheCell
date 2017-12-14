@@ -1,4 +1,4 @@
-class WormAgent extends MasterAgent
+class PulseAgent extends MasterAgent
 {
 	constructor(
 		middlePointX,
@@ -21,7 +21,8 @@ class WormAgent extends MasterAgent
 			tileHeight);
 		this.points = [];
 		this.angleStep = Math.PI / 64;
-		this.isOdd = false;
+		this.agentFatnessDeltaIsIncreasing = true;
+		this.agentFatnessDelta = options.agentFatness;
 
 		// draw the startingpoint
 		let points;
@@ -89,28 +90,33 @@ class WormAgent extends MasterAgent
 			}
 			else
 			{
-				if (this.isOdd)
+				strokeWeight(this.agentFatnessDelta);
+				point(
+					this.points[this.points.length - 1].x,
+					this.points[this.points.length - 1].y);
+				strokeWeight(options.agentFatness);
+
+				if (this.agentFatnessDeltaIsIncreasing)
 				{
-					this.isOdd != this.isOdd;
+					if (this.agentFatnessDelta < options.agentFatness * 2)
+					{
+						this.agentFatnessDelta ++;
+					}
+					else
+					{
+						this.agentFatnessDeltaIsIncreasing = false
+					}
 				}
 				else
 				{
-					let randomX = random(this.points[this.points.length - 1].x
-						- options.agentFatness,
-						this.points[this.points.length - 1].x
-						+ options.agentFatness * 2);
-					let randomY = random(this.points[this.points.length - 1].y
-						- options.agentFatness,
-						this.points[this.points.length - 1].y
-						+ options.agentFatness * 2);
-
-					strokeWeight(options.agentFatness / 2);
-					fill(0,0,0);
-					ellipse(randomX,
-						randomY,
-						options.agentFatness * 4);
-					fill(options.agentColor);
-					strokeWeight(options.agentFatness);
+					if (this.agentFatnessDelta > 0)
+					{
+						this.agentFatnessDelta --;
+					}
+					else
+					{
+						this.agentFatnessDeltaIsIncreasing = true;
+					}
 				}
 			}
 		}

@@ -207,7 +207,7 @@ class MasterAgent
 				if (tileNrX % 2 != 0)
 				{
 					// first agent
-					agent = new RectangleAgent(
+					agent = new ThreadAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
 						startX,

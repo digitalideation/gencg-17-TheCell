@@ -1,4 +1,4 @@
-class WormAgent extends MasterAgent
+class ExampleAgent extends MasterAgent
 {
 	constructor(
 		middlePointX,
@@ -21,7 +21,6 @@ class WormAgent extends MasterAgent
 			tileHeight);
 		this.points = [];
 		this.angleStep = Math.PI / 64;
-		this.isOdd = false;
 
 		// draw the startingpoint
 		let points;
@@ -89,29 +88,9 @@ class WormAgent extends MasterAgent
 			}
 			else
 			{
-				if (this.isOdd)
-				{
-					this.isOdd != this.isOdd;
-				}
-				else
-				{
-					let randomX = random(this.points[this.points.length - 1].x
-						- options.agentFatness,
-						this.points[this.points.length - 1].x
-						+ options.agentFatness * 2);
-					let randomY = random(this.points[this.points.length - 1].y
-						- options.agentFatness,
-						this.points[this.points.length - 1].y
-						+ options.agentFatness * 2);
-
-					strokeWeight(options.agentFatness / 2);
-					fill(0,0,0);
-					ellipse(randomX,
-						randomY,
-						options.agentFatness * 4);
-					fill(options.agentColor);
-					strokeWeight(options.agentFatness);
-				}
+				point(
+					this.points[this.points.length - 1].x,
+					this.points[this.points.length - 1].y);
 			}
 		}
 	}
@@ -154,9 +133,9 @@ class WormAgent extends MasterAgent
 			}
 		}
 		newX = this.points[this.points.length - 1].x
-			+ (cos(this.angle) * options.moveSpeed);
+			+ (cos(this.angle) * this.moveSpeed);
 		newY = this.points[this.points.length - 1].y
-			+ (sin(this.angle) * options.moveSpeed);
+			+ (sin(this.angle) * this.moveSpeed);
 
 		// this must be after new positions checked
 		// otherwise agents spawned in new tiles
