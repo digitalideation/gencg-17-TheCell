@@ -1,3 +1,37 @@
+class Agent {}
+
+/**
+ * NeighborCells Names
+ * @type {Integer}
+ */
+Agent.surroundingCellEnum = {
+	TOPLEFTCORNER: 0,
+	TOP: 1,
+	TOPRIGHTCORNER: 2,
+	LEFT: 3,
+	RIGHT: 4,
+	BOTTOMLEFTCORNER: 5,
+	BOTTOM: 6,
+	BOTTOMRIGHTCORNER: 7
+}
+
+class Tileinformation
+{
+	constructor(
+		centerX,
+		centerY,
+		tileWidth = options.tileWidth,
+		tileHeight = options.tileHeight,
+		radius = options.tileWidth / 2)
+	{
+		this.centerX = centerX,
+		this.centerY = centerY,
+		this.tileWidth = tileWidth;
+		this.tileHeight = tileHeight;
+		this.radius = radius;
+	}
+}
+
 class MasterAgent
 {
 	constructor(
@@ -142,7 +176,7 @@ class MasterAgent
 				if (tileNrX % 2 == 0)
 				{
 					// first agent
-					agent = new Agent(
+					agent = new ExampleAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
 						startX,
@@ -156,7 +190,7 @@ class MasterAgent
 				else
 				{
 					// alt
-					agent = new Agent(
+					agent = new ExampleAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
 						startX,
@@ -173,7 +207,7 @@ class MasterAgent
 				if (tileNrX % 2 != 0)
 				{
 					// first agent
-					agent = new Agent(
+					agent = new ExampleAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
 						startX,
@@ -187,7 +221,7 @@ class MasterAgent
 				else
 				{
 					// alt
-					agent = new Agent(
+					agent = new ExampleAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
 						startX,
