@@ -22,6 +22,7 @@ class RectangleAgent extends MasterAgent
 		this.positionX = spawnX;
 		this.positionY = spawnY;
 		this.vector = this.vectorFromAngle(angle);
+		//console.log(this.id+" :"+this.angle+"      VECTOR:"+this.vector);
 		//this.length = moveSpeed*0.1;
 		this.width = random(3,tileWidth/10);
 		this.height = random(3,tileHeight/10);
@@ -84,8 +85,8 @@ class RectangleAgent extends MasterAgent
 		this.positionY += this.vector.y*this.length;
 		RectangleAgent.collisionPointsArray.push({id:this.id,x:this.positionX,y:this.positionY,width:this.width,height:this.height,vector:this.vector.copy()});
 	*/
-		newX = this.positionX+this.vector.x*options.moveSpeed;
-		newY = this.positionY+this.vector.y*options.moveSpeed;
+		newX = this.positionX+this.vector.x*options.moveSpeed*0.5;
+		newY = this.positionY+this.vector.y*options.moveSpeed*0.5;
 		RectangleAgent.collisionPointsArray.push({id:this.id,x:this.positionX,y:this.positionY,width:this.width,height:this.height,vector:this.vector.copy()});
 
 	/* 	newX = this.points[this.points.length - 1].x
@@ -145,16 +146,29 @@ class RectangleAgent extends MasterAgent
 		}
 		else if (options.sendToNeighbor)
 		{
-			if ((this.hitTop
-				|| this.hitBottom
-				|| this.hitLeft
-				|| this.hitRight)
-				&& !(this.hitTopWindowBorder
-					|| this.hitRightWindowBorder
-					|| this.hitBottomWindowBorder
-					|| this.hitLeftWindowBorder))
+			if ((this.hitTop)
+				&& !this.hitTopWindowBorder)
 			{
+				this.angle = atan(this.vector.y/this.vector.x);
 				this.sendToNeighborCell(newX, newY);
+			}
+			else if ((this.hitLeft)
+				&& !(this.hitLeftWindowBorder))
+			{
+				this.angle = atan(this.vector.y/this.vector.x);
+				this.sendToNeighborCell(newX, newY);
+			}
+			else if ((this.hitBottom)
+				&& !(this.hitBottomWindowBorder))
+			{
+				this.angle = atan(this.vector.y/this.vector.x);
+				this.sendToNeighborCell(newX, newY+this.height);
+			}
+			else if ((this.hitRight)
+				&& !(this.hitRightWindowBorder))
+			{
+				this.angle = atan(this.vector.y/this.vector.x);
+				this.sendToNeighborCell(newX+this.width, newY);
 			}
 		}
 		this.positionX = newX;
@@ -272,7 +286,6 @@ class RectangleAgent extends MasterAgent
 			// using radius
 		}
 		else if (options.bounceOffLocalBorder
-			&& !this.useRadius
 			&& (this.hitTop
 			|| this.hitBottom
 			|| this.hitLeft
