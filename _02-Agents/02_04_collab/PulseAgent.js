@@ -160,9 +160,9 @@ class PulseAgent extends MasterAgent
 			}
 		}
 		newX = this.points[this.points.length - 1].x
-			+ (cos(this.angle) * this.moveSpeed);
+			+ (cos(this.angle) * options.moveSpeed);
 		newY = this.points[this.points.length - 1].y
-			+ (sin(this.angle) * this.moveSpeed);
+			+ (sin(this.angle) * options.moveSpeed);
 
 		// this must be after new positions checked
 		// otherwise agents spawned in new tiles
