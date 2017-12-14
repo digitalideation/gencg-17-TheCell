@@ -182,7 +182,7 @@ class MasterAgent
 						startX,
 						startY,
 						this.angle,
-						this.moveSpeed,
+						options.moveSpeed,
 						cellinformation.tileWidth,
 						cellinformation.tileHeight,
 						cellinformation.radius);
@@ -196,7 +196,7 @@ class MasterAgent
 						startX,
 						startY,
 						this.angle,
-						this.moveSpeed,
+						options.moveSpeed,
 						cellinformation.tileWidth,
 						cellinformation.tileHeight,
 						cellinformation.radius);
@@ -213,7 +213,7 @@ class MasterAgent
 						startX,
 						startY,
 						this.angle,
-						this.moveSpeed,
+						options.moveSpeed,
 						cellinformation.tileWidth,
 						cellinformation.tileHeight,
 						cellinformation.radius);
@@ -227,7 +227,7 @@ class MasterAgent
 						startX,
 						startY,
 						this.angle,
-						this.moveSpeed,
+						options.moveSpeed,
 						cellinformation.tileWidth,
 						cellinformation.tileHeight,
 						cellinformation.radius);

@@ -22,12 +22,11 @@ class RectangleAgent extends MasterAgent
 		this.positionX = spawnX;
 		this.positionY = spawnY;
 		this.vector = this.vectorFromAngle(angle);
-		this.length = moveSpeed*0.1;
+		//this.length = moveSpeed*0.1;
 		this.width = random(3,tileWidth/10);
 		this.height = random(3,tileHeight/10);
 		RectangleAgent.id++;
 		this.id = RectangleAgent.id;
-		RectangleAgent.counter++;
 	}
 
 	vectorFromAngle(angle){
@@ -85,8 +84,8 @@ class RectangleAgent extends MasterAgent
 		this.positionY += this.vector.y*this.length;
 		RectangleAgent.collisionPointsArray.push({id:this.id,x:this.positionX,y:this.positionY,width:this.width,height:this.height,vector:this.vector.copy()});
 	*/
-		newX = this.positionX+this.vector.x*this.length;
-		newY = this.positionY+this.vector.y*this.length;
+		newX = this.positionX+this.vector.x*options.moveSpeed;
+		newY = this.positionY+this.vector.y*options.moveSpeed;
 		RectangleAgent.collisionPointsArray.push({id:this.id,x:this.positionX,y:this.positionY,width:this.width,height:this.height,vector:this.vector.copy()});
 
 	/* 	newX = this.points[this.points.length - 1].x
@@ -320,5 +319,4 @@ class RectangleAgent extends MasterAgent
 	}
 }
 RectangleAgent.id = 0;
-RectangleAgent.counter = 0;
 RectangleAgent.collisionPointsArray = [];

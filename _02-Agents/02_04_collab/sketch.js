@@ -164,7 +164,7 @@ function spawnAgents()
 							startX,
 							startY,
 							random(0, Math.PI * 2),
-							2,
+							options.moveSpeed,
 							options.tileWidth,
 							options.tileHeight);
 					}
@@ -177,7 +177,7 @@ function spawnAgents()
 							startX,
 							startY,
 							random(0, Math.PI * 2),
-							2,
+							options.moveSpeed,
 							options.tileWidth,
 							options.tileHeight);
 					}
@@ -193,7 +193,7 @@ function spawnAgents()
 							startX,
 							startY,
 							random(0, Math.PI * 2),
-							2,
+							options.moveSpeed,
 							options.tileWidth,
 							options.tileHeight);
 					}
@@ -206,7 +206,7 @@ function spawnAgents()
 							startX,
 							startY,
 							random(0, Math.PI * 2),
-							2,
+							options.moveSpeed,
 							options.tileWidth,
 							options.tileHeight);
 					}
