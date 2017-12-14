@@ -28,6 +28,8 @@ class RectangleAgent extends MasterAgent
 		this.height = random(3,tileHeight/10);
 		RectangleAgent.id++;
 		this.id = RectangleAgent.id;
+		this.SpawnBottom = true;
+		this.SpawnRight = true;
 	}
 
 	vectorFromAngle(angle){
@@ -171,9 +173,16 @@ class RectangleAgent extends MasterAgent
 				this.sendToNeighborCell(newX+this.width, newY);
 			}
 		}
-		this.positionX = newX;
-		this.positionY = newY;
+		if(!this.SpawnRight){
+			this.positionX = newX;
+		}
+		if(!this.SpawnBottom){
+			this.positionY = newY;
+		}
 		this.customBehaviour();
+
+		this.SpawnRight = false;
+		this.SpawnBottom = false;
 	}
 
 	checkBorders(xCoord, yCoord)
@@ -212,7 +221,11 @@ class RectangleAgent extends MasterAgent
 		}
 		else if (xCoord+this.width > (this.location.x + this.tileWidth / 2))
 		{
-			this.hitRight = true;
+			if(this.SpawnRight){
+				this.positionX -= (this.width+5);
+			}else{
+				this.hitRight = true;
+			}
 		}
 
 		// top local Border
@@ -222,7 +235,11 @@ class RectangleAgent extends MasterAgent
 		}
 		else if (yCoord+this.height > (this.location.y + this.tileHeight / 2))
 		{
-			this.hitBottom = true;
+			if(this.SpawnBottom){
+				this.positionY -= (this.height+5);
+			}else{
+				this.hitBottom = true;
+			}
 		}
 	}
 
