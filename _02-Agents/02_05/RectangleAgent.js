@@ -22,11 +22,14 @@ class RectangleAgent extends MasterAgent
 		this.positionX = spawnX;
 		this.positionY = spawnY;
 		this.vector = this.vectorFromAngle(angle);
+		//console.log(this.id+" :"+this.angle+"      VECTOR:"+this.vector);
 		//this.length = moveSpeed*0.1;
 		this.width = random(3,tileWidth/10);
 		this.height = random(3,tileHeight/10);
 		RectangleAgent.id++;
 		this.id = RectangleAgent.id;
+		this.SpawnBottom = true;
+		this.SpawnRight = true;
 	}
 
 	vectorFromAngle(angle){
@@ -84,8 +87,8 @@ class RectangleAgent extends MasterAgent
 		this.positionY += this.vector.y*this.length;
 		RectangleAgent.collisionPointsArray.push({id:this.id,x:this.positionX,y:this.positionY,width:this.width,height:this.height,vector:this.vector.copy()});
 	*/
-		newX = this.positionX+this.vector.x*options.moveSpeed;
-		newY = this.positionY+this.vector.y*options.moveSpeed;
+		newX = this.positionX+this.vector.x*options.moveSpeed*0.5;
+		newY = this.positionY+this.vector.y*options.moveSpeed*0.5;
 		RectangleAgent.collisionPointsArray.push({id:this.id,x:this.positionX,y:this.positionY,width:this.width,height:this.height,vector:this.vector.copy()});
 
 	/* 	newX = this.points[this.points.length - 1].x
@@ -104,21 +107,21 @@ class RectangleAgent extends MasterAgent
 			// reset Position if local Border is met
 			if (this.hitLeft)
 			{
-				newX = this.positionX - this.tileWidth / 2;
+				newX = this.location.x - this.tileWidth / 2;
 			}
 			else if (this.hitRight)
 			{
-				newX = this.positionX + this.tileWidth / 2;
+				newX = this.location.x - this.width + this.tileWidth / 2;
 			}
 
 			// top local Border
 			if (this.hitTop)
 			{
-				newY = this.positionY - this.tileHeight / 2;
+				newY = this.location.y - this.tileHeight / 2;
 			}
 			else if (this.hitBottom)
 			{
-				newY = this.positionY + this.tileHeight / 2;
+				newY = this.location.y - this.height + this.tileHeight / 2;
 			}
 		}
 		else if (!options.sendToNeighbor && options.bounceOffLocalBorder)
@@ -126,40 +129,60 @@ class RectangleAgent extends MasterAgent
 			// reset Position if local Border is met
 			if (this.hitLeft)
 			{
-				newX = this.positionX - this.tileWidth / 2;
+				newX = this.location.x - this.tileWidth / 2;
 			}
 			else if (this.hitRight)
 			{
-				newX = this.positionX + this.tileWidth / 2;
+				newX = this.location.x - this.width + this.tileWidth / 2;
 			}
 
 			// top local Border
 			if (this.hitTop)
 			{
-				newY = this.positionY - this.tileHeight / 2;
+				newY = this.location.y - this.tileHeight / 2;
 			}
 			else if (this.hitBottom)
 			{
-				newY = this.positionY + this.tileHeight / 2;
+				newY = this.location.y - this.height + this.tileHeight / 2;
 			}
 		}
 		else if (options.sendToNeighbor)
 		{
-			if ((this.hitTop
-				|| this.hitBottom
-				|| this.hitLeft
-				|| this.hitRight)
-				&& !(this.hitTopWindowBorder
-					|| this.hitRightWindowBorder
-					|| this.hitBottomWindowBorder
-					|| this.hitLeftWindowBorder))
+			if ((this.hitTop)
+				&& !this.hitTopWindowBorder)
 			{
+				this.angle = this.vector.heading();
 				this.sendToNeighborCell(newX, newY);
 			}
+			else if ((this.hitLeft)
+				&& !(this.hitLeftWindowBorder))
+			{
+				this.angle = this.vector.heading();
+				this.sendToNeighborCell(newX, newY);
+			}
+			else if ((this.hitBottom)
+				&& !(this.hitBottomWindowBorder))
+			{
+				this.angle = this.vector.heading();
+				this.sendToNeighborCell(newX, newY+this.height);
+			}
+			else if ((this.hitRight)
+				&& !(this.hitRightWindowBorder))
+			{
+				this.angle = this.vector.heading();
+				this.sendToNeighborCell(newX+this.width, newY);
+			}
 		}
-		this.positionX = newX;
-		this.positionY = newY;
+		if(!this.SpawnRight){
+			this.positionX = newX;
+		}
+		if(!this.SpawnBottom){
+			this.positionY = newY;
+		}
 		this.customBehaviour();
+
+		this.SpawnRight = false;
+		this.SpawnBottom = false;
 	}
 
 	checkBorders(xCoord, yCoord)
@@ -198,7 +221,11 @@ class RectangleAgent extends MasterAgent
 		}
 		else if (xCoord+this.width > (this.location.x + this.tileWidth / 2))
 		{
-			this.hitRight = true;
+			if(this.SpawnRight){
+				this.positionX -= (this.width+5);
+			}else{
+				this.hitRight = true;
+			}
 		}
 
 		// top local Border
@@ -208,7 +235,11 @@ class RectangleAgent extends MasterAgent
 		}
 		else if (yCoord+this.height > (this.location.y + this.tileHeight / 2))
 		{
-			this.hitBottom = true;
+			if(this.SpawnBottom){
+				this.positionY -= (this.height+5);
+			}else{
+				this.hitBottom = true;
+			}
 		}
 	}
 
@@ -272,7 +303,6 @@ class RectangleAgent extends MasterAgent
 			// using radius
 		}
 		else if (options.bounceOffLocalBorder
-			&& !this.useRadius
 			&& (this.hitTop
 			|| this.hitBottom
 			|| this.hitLeft
@@ -300,10 +330,6 @@ class RectangleAgent extends MasterAgent
 			{
 				this.vector.y *= -1;
 				this.vector.x *= -1;
-			}
-			if (this.hitBottom)
-			{
-				this.vector.y *= -1;
 			}
 			if (this.hitLeft && this.hitTop)
 			{
