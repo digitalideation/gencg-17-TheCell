@@ -10,6 +10,7 @@ includes:
   - src: "PulseAgent.js"
   - src: "WormAgent.js"
   - src: "ThreadAgent.js"
+  - src: "RectangleAgent.js"
   - src: "sketch.js"
 ---
 
