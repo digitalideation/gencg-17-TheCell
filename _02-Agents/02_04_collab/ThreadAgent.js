@@ -1,4 +1,4 @@
-class WormAgent extends MasterAgent
+class ThreadAgent extends MasterAgent
 {
 	constructor(
 		middlePointX,
@@ -21,7 +21,6 @@ class WormAgent extends MasterAgent
 			tileHeight);
 		this.points = [];
 		this.angleStep = Math.PI / 64;
-		this.isOdd = false;
 
 		// draw the startingpoint
 		let points;
@@ -89,29 +88,44 @@ class WormAgent extends MasterAgent
 			}
 			else
 			{
-				if (this.isOdd)
-				{
-					this.isOdd != this.isOdd;
-				}
-				else
-				{
-					let randomX = random(this.points[this.points.length - 1].x
-						- options.agentFatness,
-						this.points[this.points.length - 1].x
-						+ options.agentFatness * 2);
-					let randomY = random(this.points[this.points.length - 1].y
-						- options.agentFatness,
-						this.points[this.points.length - 1].y
-						+ options.agentFatness * 2);
+				let pointX = this.points[this.points.length - 1].x;
+				let pointY = this.points[this.points.length - 1].y;
+				let threadVec = this.points[this.points.length - 1];
 
-					strokeWeight(options.agentFatness / 2);
-					fill(0,0,0);
-					ellipse(randomX,
-						randomY,
-						options.agentFatness * 4);
-					fill(options.agentColor);
-					strokeWeight(options.agentFatness);
-				}
+				strokeWeight(options.agentFatness / 2);
+				ellipse(pointX,
+					pointY,
+					options.agentFatness * 2);
+
+				let currentEle = this;
+				let maxLineDist = (options.tileWidth + options.tileHeight) / 2;
+
+				agents.forEach(function (ele, index, arr)
+				{
+					if (ele == currentEle)
+					{
+						// draw a connection between all lines
+						// that are close enough
+						for(let i = index + 1; i < arr.length; i++)
+						{
+							if (arr[i] instanceof ThreadAgent)
+							{
+								let thisPoint = arr[i].points[arr[i].points.length -1];
+								if (threadVec.dist(thisPoint) < maxLineDist)
+								{
+									line(pointX,
+										pointY,
+										thisPoint.x,
+										thisPoint.y);
+								}
+								// return;
+							}
+						}
+					}
+				});
+
+				fill(options.agentColor);
+				strokeWeight(options.agentFatness);
 			}
 		}
 	}

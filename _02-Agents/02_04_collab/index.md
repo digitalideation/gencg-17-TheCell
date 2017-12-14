@@ -9,6 +9,7 @@ includes:
   - src: "ExampleAgent.js"
   - src: "PulseAgent.js"
   - src: "WormAgent.js"
+  - src: "ThreadAgent.js"
   - src: "sketch.js"
 ---
 

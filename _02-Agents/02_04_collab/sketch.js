@@ -158,7 +158,7 @@ function spawnAgents()
 					if (tileNrX % 2 == 0)
 					{
 						// first agent
-						agent = new RectangleAgent(
+						agent = new ThreadAgent(
 							startX,
 							startY,
 							startX,
