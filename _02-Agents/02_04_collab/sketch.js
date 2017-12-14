@@ -200,7 +200,7 @@ function spawnAgents()
 					else
 					{
 						// alt
-						agent = new PulseAgent(
+						agent = new WormAgent(
 							startX,
 							startY,
 							startX,

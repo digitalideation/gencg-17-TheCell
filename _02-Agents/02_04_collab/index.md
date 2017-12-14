@@ -8,6 +8,7 @@ includes:
   - src: "MasterAgent.js"
   - src: "ExampleAgent.js"
   - src: "PulseAgent.js"
+  - src: "WormAgent.js"
   - src: "sketch.js"
 ---
 

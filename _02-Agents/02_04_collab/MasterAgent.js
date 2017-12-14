@@ -221,7 +221,7 @@ class MasterAgent
 				else
 				{
 					// alt
-					agent = new PulseAgent(
+					agent = new WormAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
 						startX,
