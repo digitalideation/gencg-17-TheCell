@@ -105,7 +105,7 @@ class WormAgent extends MasterAgent
 						+ options.agentFatness * 2);
 
 					strokeWeight(options.agentFatness / 2);
-					fill(0,0,0);
+					fill(options.backgroundColor);
 					ellipse(randomX,
 						randomY,
 						options.agentFatness * 4);
