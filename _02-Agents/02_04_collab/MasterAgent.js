@@ -176,7 +176,7 @@ class MasterAgent
 				if (tileNrX % 2 == 0)
 				{
 					// first agent
-					agent = new PulseAgent(
+					agent = new RectangleAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
 						startX,
@@ -207,7 +207,7 @@ class MasterAgent
 				if (tileNrX % 2 != 0)
 				{
 					// first agent
-					agent = new PulseAgent(
+					agent = new RectangleAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
 						startX,

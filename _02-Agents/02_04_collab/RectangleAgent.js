@@ -20,36 +20,18 @@ class RectangleAgent extends MasterAgent
 			tileWidth,
 			tileHeight);
 		this.positionX = spawnX;
-		this.positionY = positionY;
-		this.vector = vectorFromAngle(angle);
+		this.positionY = spawnY;
+		this.vector = this.vectorFromAngle(angle);
 		this.length = moveSpeed*0.1;
 		this.width = random(3,tileWidth/10);
 		this.height = random(3,tileHeight/10);
 		RectangleAgent.id++;
 		this.id = RectangleAgent.id;
-		//this.points = [];
-		//this.angleStep = Math.PI / 64;
+		RectangleAgent.counter++;
+	}
 
-		// draw the startingpoint
-		let points;
-		if (this.pointRandom)
-		{
-			let xPos = random(
-				this.location.x - this.tileWidth / 2,
-				this.location.x + this.tileWidth / 2);
-			let yPos = random(
-				this.location.y - this.tileHeight / 2,
-				this.location.y + this.tileHeight / 2);
-			points = createVector(xPos, yPos);
-		}
-		else
-		{
-			points = createVector(
-				spawnX,
-				spawnY);
-		}
-
-		this.points[0] = points;
+	vectorFromAngle(angle){
+		return createVector(cos(angle),sin(angle));
 	}
 
 	drawLocation(drawAllPointsAnyway = false)
@@ -58,49 +40,8 @@ class RectangleAgent extends MasterAgent
 		{
 			return;
 		}
-
-		// draw debug border
-		if (window.debugMode)
-		{
-			stroke(color([150, 150, 150]));
-			strokeWeight(1);
-			// draw Right
-			line(this.location.x + this.tileWidth / 2,
-				this.location.y - this.tileHeight / 2,
-				this.location.x + this.tileWidth / 2,
-				this.location.y + this.tileHeight / 2);
-			// draw Bottom
-			line(this.location.x - this.tileWidth / 2,
-				this.location.y + this.tileHeight / 2,
-				this.location.x + this.tileWidth / 2,
-				this.location.y + this.tileHeight / 2);
-			stroke(color(options.agentColor));
-			strokeWeight(options.agentFatness);
-		}
-
-		if (drawAllPointsAnyway)
-		{
-			for (let i = 0; i < this.points.length; i++)
-			{
-				point(this.points[i].x, this.points[i].y);
-			}
-		}
-		else
-		{
-			if (this.drawAllPoints)
-			{
-				for (let i = 0; i < this.points.length; i++)
-				{
-					point(this.points[i].x, this.points[i].y);
-				}
-			}
-			else
-			{
-				point(
-					this.points[this.points.length - 1].x,
-					this.points[this.points.length - 1].y);
-			}
-		}
+		stroke(options.agentColor,options.agentColor,options.agentColor);
+		rect(this.positionX,this.positionY,this.width,this.height);
 	}
 
 	updateCycle()
@@ -112,7 +53,7 @@ class RectangleAgent extends MasterAgent
 
 		let newX;
 		let newY;
-
+		/*
 		// only change blocked Agents angle if they are not send to neighbors
 		// and should not bounce
 		if (!options.sendToNeighbor && !options.bounceOffLocalBorder)
@@ -139,220 +80,87 @@ class RectangleAgent extends MasterAgent
 				// check if it is at the left or right middle and speed it up a bit
 				this.incrementAngle();
 			}
-		}
-		newX = this.points[this.points.length - 1].x
+		}*/
+	/*	this.positionX += this.vector.x*this.length;
+		this.positionY += this.vector.y*this.length;
+		RectangleAgent.collisionPointsArray.push({id:this.id,x:this.positionX,y:this.positionY,width:this.width,height:this.height,vector:this.vector.copy()});
+	*/
+		newX = this.positionX+this.vector.x*this.length;
+		newY = this.positionY+this.vector.y*this.length;
+		RectangleAgent.collisionPointsArray.push({id:this.id,x:this.positionX,y:this.positionY,width:this.width,height:this.height,vector:this.vector.copy()});
+
+	/* 	newX = this.points[this.points.length - 1].x
 			+ (cos(this.angle) * this.moveSpeed);
 		newY = this.points[this.points.length - 1].y
 			+ (sin(this.angle) * this.moveSpeed);
-
+	*/
 		// this must be after new positions checked
 		// otherwise agents spawned in new tiles
 		// will always hit borders at the start
 		this.checkBorders(newX, newY);
 		this.changeAngleBasedOnBorders();
 
-		if (this.useRadius)
+		if (!options.sendToNeighbor && !options.bounceOffLocalBorder)
 		{
-			let aSquared = Math.pow(Math.abs(newX - this.location.x), 2);
-			let bSquared = Math.pow(Math.abs(newY - this.location.y), 2);
-			let cSquared = Math.pow(this.radius, 2);
-			if (aSquared + bSquared < cSquared)
+			// reset Position if local Border is met
+			if (this.hitLeft)
 			{
-				// all normal
+				newX = this.positionX - this.tileWidth / 2;
 			}
-			else
+			else if (this.hitRight)
 			{
-				// set the pos back a step
-				newX = this.points[this.points.length - 1].x;
-				newY = this.points[this.points.length - 1].y;
-
-				if (
-					this.angle > Math.PI / 2
-					&& this.angle < Math.PI * 3/2)
-				{
-					this.incrementAngle();
-				}
-				else if ((this.angle < Math.PI / 2)
-					|| this.angle > Math.PI * 3/2)
-				{
-					this.decrementAngle();
-				}
-
-				// kill
-				this.agentAlive = false;
-
-				/*
-				if (this.angle > 0
-					&& (this.angle < Math.PI
-						|| this.angle > Math.PI * 3/2))
-				{
-					this.decrementAngle();
-				}
-				else
-					*/
-
-				// if (this.angle >= 0
-				// 	&& this.angle < (Math.PI / 2))
-				// {
-				// 	// bottom right direction
-				// 	// this.angle += angleStep;
-				// 	this.incrementAngle();
-				// }
-				// else if (this.angle >= (Math.PI / 2)
-				// 	&& this.angle < Math.PI)
-				// {
-				// 	// bottom left direction
-				// 	// this.angle += angleStep;
-				// 	this.incrementAngle();
-				// }
-				// else if (this.angle >= Math.PI
-				// 	&& this.angle < (2 * Math.PI * 2 / 3))
-				// {
-				// 	// top left direction
-				// 	// this.angle -= angleStep;
-				// 	this.incrementAngle();
-				// }
-				// else if (this.angle >= (2 * Math.PI * 2 / 3)
-				// 	&& this.angle < Math.PI * 2)
-				// {
-				// 	// top right direction
-				// 	// this.angle += angleStep;
-				// 	this.incrementAngle();
-				// }
-				// else
-				// {
-				// 	this.angle += angleStep;
-				// }
+				newX = this.positionX + this.tileWidth / 2;
 			}
-			// if (newX < (this.location.x - this.radius))
-			// {
-			// 	newX = this.location.x - this.radius;
-			// }
-			// else if (newX > (this.location.x + this.radius))
-			// {
-			// 	newX = this.location.x + this.radius;
-			// }
 
-			// if (newY < (this.location.y - this.radius))
-			// {
-			// 	newY = this.location.y - this.radius;
-			// }
-			// else if (newY > (this.location.y + this.radius))
-			// {
-			// 	newY = this.location.y + this.radius;
-			// }
-			if (this.angle > Math.PI * 2 || this.angle < 0)
+			// top local Border
+			if (this.hitTop)
 			{
-				this.agentAlive = false;
+				newY = this.positionY - this.tileHeight / 2;
+			}
+			else if (this.hitBottom)
+			{
+				newY = this.positionY + this.tileHeight / 2;
 			}
 		}
-		else
+		else if (!options.sendToNeighbor && options.bounceOffLocalBorder)
 		{
-			if (!options.sendToNeighbor && !options.bounceOffLocalBorder)
+			// reset Position if local Border is met
+			if (this.hitLeft)
 			{
-				// reset Position if local Border is met
-				if (this.hitLeft)
-				{
-					newX = this.location.x - this.tileWidth / 2;
-				}
-				else if (this.hitRight)
-				{
-					newX = this.location.x + this.tileWidth / 2;
-				}
-
-				// top local Border
-				if (this.hitTop)
-				{
-					newY = this.location.y - this.tileHeight / 2;
-				}
-				else if (this.hitBottom)
-				{
-					newY = this.location.y + this.tileHeight / 2;
-				}
+				newX = this.positionX - this.tileWidth / 2;
 			}
-			else if (!options.sendToNeighbor && options.bounceOffLocalBorder)
+			else if (this.hitRight)
 			{
-				// reset Position if local Border is met
-				if (this.hitLeft)
-				{
-					newX = this.location.x - this.tileWidth / 2;
-				}
-				else if (this.hitRight)
-				{
-					newX = this.location.x + this.tileWidth / 2;
-				}
-
-				// top local Border
-				if (this.hitTop)
-				{
-					newY = this.location.y - this.tileHeight / 2;
-				}
-				else if (this.hitBottom)
-				{
-					newY = this.location.y + this.tileHeight / 2;
-				}
-			}
-			else if (options.sendToNeighbor)
-			{
-				// if wall is hit
-				// if (this.sendToNeighbor &&
-				// 	(this.hitTop
-				// 	|| this.hitBottom
-				// 	|| this.hitLeft
-				// 	|| this.hitRight)
-				// 	&& !(this.hitTopWindowBorder
-				// 		|| this.hitRightWindowBorder
-				// 		|| this.hitBottomWindowBorder
-				// 		|| this.hitLeftWindowBorder))
-				// {
-				// 	this.sendToNeighborCell(newX, newY);
-				// }
-				// if wall is hit
-				if ((this.hitTop
-					|| this.hitBottom
-					|| this.hitLeft
-					|| this.hitRight)
-					&& !(this.hitTopWindowBorder
-						|| this.hitRightWindowBorder
-						|| this.hitBottomWindowBorder
-						|| this.hitLeftWindowBorder))
-				{
-					this.sendToNeighborCell(newX, newY);
-				}
+				newX = this.positionX + this.tileWidth / 2;
 			}
 
-			// if (this.angle >= 0 && this.angle < Math.PI / 2)
-			// {
-			// 	// bottom right direction
-			// }
-			// else if (this.angle >= Math.PI / 2 && this.angle < Math.PI)
-			// {
-			// 	// bottom left direction
-			// }
-			// else if (this.angle >= Math.PI && this.angle < 2 * Math.PI / 3)
-			// {
-			// 	// top left direction
-			// }
-			// else
-			// {
-			// 	// top right direction
-			// }
-
-			this.customBehaviour();
+			// top local Border
+			if (this.hitTop)
+			{
+				newY = this.positionY - this.tileHeight / 2;
+			}
+			else if (this.hitBottom)
+			{
+				newY = this.positionY + this.tileHeight / 2;
+			}
 		}
-
-		let newP = createVector(newX, newY);
-		this.points.push(newP);
-	}
-
-	incrementAngle()
-	{
-		this.angle += this.angleStep;
-	}
-
-	decrementAngle()
-	{
-		this.angle -= this.angleStep;
+		else if (options.sendToNeighbor)
+		{
+			if ((this.hitTop
+				|| this.hitBottom
+				|| this.hitLeft
+				|| this.hitRight)
+				&& !(this.hitTopWindowBorder
+					|| this.hitRightWindowBorder
+					|| this.hitBottomWindowBorder
+					|| this.hitLeftWindowBorder))
+			{
+				this.sendToNeighborCell(newX, newY);
+			}
+		}
+		this.positionX = newX;
+		this.positionY = newY;
+		this.customBehaviour();
 	}
 
 	checkBorders(xCoord, yCoord)
@@ -367,7 +175,7 @@ class RectangleAgent extends MasterAgent
 		this.hitLeftWindowBorder = false;
 
 		// check if hit a window border
-		if (xCoord > windowWidth)
+		if (xCoord+this.width > windowWidth)
 		{
 			this.hitRightWindowBorder = true;
 		}
@@ -376,7 +184,7 @@ class RectangleAgent extends MasterAgent
 			this.hitLeftWindowBorder = true;
 		}
 
-		if (yCoord > windowHeight)
+		if (yCoord+this.height > windowHeight)
 		{
 			this.hitBottomWindowBorder = true;
 		}
@@ -384,32 +192,24 @@ class RectangleAgent extends MasterAgent
 		{
 			this.hitTopWindowBorder = true;
 		}
-
-		if (this.useRadius)
+		// left local border
+		if (xCoord < (this.location.x - this.tileWidth / 2))
 		{
-			// TODO
+			this.hitLeft = true;
 		}
-		else
+		else if (xCoord+this.width > (this.location.x + this.tileWidth / 2))
 		{
-			// left local border
-			if (xCoord < (this.location.x - this.tileWidth / 2))
-			{
-				this.hitLeft = true;
-			}
-			else if (xCoord > (this.location.x + this.tileWidth / 2))
-			{
-				this.hitRight = true;
-			}
+			this.hitRight = true;
+		}
 
-			// top local Border
-			if (yCoord < (this.location.y - this.tileHeight / 2))
-			{
-				this.hitTop = true;
-			}
-			else if (yCoord > (this.location.y + this.tileHeight / 2))
-			{
-				this.hitBottom = true;
-			}
+		// top local Border
+		if (yCoord < (this.location.y - this.tileHeight / 2))
+		{
+			this.hitTop = true;
+		}
+		else if (yCoord+this.height > (this.location.y + this.tileHeight / 2))
+		{
+			this.hitBottom = true;
 		}
 	}
 
@@ -419,38 +219,41 @@ class RectangleAgent extends MasterAgent
 		{
 			if(this.hitTopWindowBorder)
 			{
-				this.angle = random(0, Math.PI);
+				this.vector.y *= -1;
 			}
 			if (this.hitRightWindowBorder)
 			{
-				this.angle = random(Math.PI / 2, Math.PI * 3/2)
+				this.vector.x *= -1;
 			}
 			if (this.hitBottomWindowBorder)
 			{
-				this.angle = random(Math.PI, Math.PI * 2);
+				this.vector.y *= -1;
 			}
 			if (this.hitLeftWindowBorder)
 			{
-				this.angle = random(Math.PI / 2, Math.PI * 3/2)
-					+ Math.PI;
+				this.vector.x *= -1;
 			}
 
 			// edge cases
 			if (this.hitTopWindowBorder && this.hitRightWindowBorder)
 			{
-				this.angle = random(Math.PI / 2, Math.PI);
+				this.vector.y *= -1;
+				this.vector.x *= -1;
 			}
 			if (this.hitRightWindowBorder && this.hitBottomWindowBorder)
 			{
-				this.angle = random(Math.PI, Math.PI * 3/2);
+				this.vector.y *= -1;
+				this.vector.x *= -1;
 			}
 			if (this.hitBottomWindowBorder && this.hitLeftWindowBorder)
 			{
-				this.angle = random(Math.PI * 3/2, Math.PI * 2);
+				this.vector.y *= -1;
+				this.vector.x *= -1;
 			}
 			if (this.hitLeftWindowBorder && this.hitTopWindowBorder)
 			{
-				this.angle = random(0, Math.PI / 2);
+				this.vector.y *= -1;
+				this.vector.x *= -1;
 			}
 		}
 
@@ -478,38 +281,35 @@ class RectangleAgent extends MasterAgent
 		{
 			if(this.hitTop)
 			{
-				this.angle = random(0, Math.PI);
+				this.vector.y *= -1;
 			}
 			if (this.hitRight)
 			{
-				this.angle = random(Math.PI / 2, Math.PI * 3/2)
+				this.vector.x *= -1;
 			}
 			if (this.hitBottom)
 			{
-				this.angle = random(Math.PI, Math.PI * 2);
+				this.vector.y *= -1;
 			}
 			if (this.hitLeft)
 			{
-				this.angle = random(Math.PI / 2, Math.PI * 3/2)
-					+ Math.PI;
+				this.vector.x *= -1;
 			}
 
 			// edge cases
 			if (this.hitTop && this.hitRight)
 			{
-				this.angle = random(Math.PI / 2, Math.PI);
+				this.vector.y *= -1;
+				this.vector.x *= -1;
 			}
 			if (this.hitBottom)
 			{
-				this.angle = random(Math.PI, Math.PI * 3/2);
-			}
-			if (this.hitBottom)
-			{
-				this.angle = random(Math.PI * 3/2, Math.PI * 2);
+				this.vector.y *= -1;
 			}
 			if (this.hitLeft && this.hitTop)
 			{
-				this.angle = random(0, Math.PI / 2);
+				this.vector.y *= -1;
+				this.vector.x *= -1;
 			}
 		}
 	}
@@ -520,3 +320,5 @@ class RectangleAgent extends MasterAgent
 	}
 }
 RectangleAgent.id = 0;
+RectangleAgent.counter = 0;
+RectangleAgent.collisionPointsArray = [];

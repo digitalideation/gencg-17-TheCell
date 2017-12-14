@@ -158,7 +158,7 @@ function spawnAgents()
 					if (tileNrX % 2 == 0)
 					{
 						// first agent
-						agent = new PulseAgent(
+						agent = new RectangleAgent(
 							startX,
 							startY,
 							startX,
@@ -187,7 +187,7 @@ function spawnAgents()
 					if (tileNrX % 2 != 0)
 					{
 						// first agent
-						agent = new PulseAgent(
+						agent = new RectangleAgent(
 							startX,
 							startY,
 							startX,

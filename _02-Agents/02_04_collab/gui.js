@@ -12,7 +12,7 @@ let options = {
 	tileHeight: 150,
 	agentColor: [66, 230, 220], //RGB
 	backgroundColor: [0, 0, 0], //RGB
-	backgroundAlpha: 0, //0 - 100
+	backgroundAlpha: 30, //0 - 100
 	randomPlacement: false,
 	useRadius: false,
 	sendToNeighbor: true,
