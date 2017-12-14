@@ -7,6 +7,7 @@ includes:
   - src: "gui.js"
   - src: "MasterAgent.js"
   - src: "ExampleAgent.js"
+  - src: "PulseAgent.js"
   - src: "sketch.js"
 ---
 

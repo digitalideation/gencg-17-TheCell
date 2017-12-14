@@ -146,15 +146,71 @@ function spawnAgents()
 			startY = y * options.tileHeight + options.tileHeight / 2;
 			for (let i = 0; i < options.numberOfAgents; i++)
 			{
-				agent = new ExampleAgent(
-					startX,
-					startY,
-					startX,
-					startY,
-					random(0, Math.PI * 2),
-					2,
-					options.tileWidth,
-					options.tileHeight);
+				let tileNrX = Math.floor(startX
+				/ options.tileWidth);
+				let tileNrY = Math.floor(startY
+					/ options.tileHeight);
+
+				let agent;
+
+				if (tileNrY % 2 == 0)
+				{
+					if (tileNrX % 2 == 0)
+					{
+						// first agent
+						agent = new PulseAgent(
+							startX,
+							startY,
+							startX,
+							startY,
+							random(0, Math.PI * 2),
+							2,
+							options.tileWidth,
+							options.tileHeight);
+					}
+					else
+					{
+						// alt
+						agent = new PulseAgent(
+							startX,
+							startY,
+							startX,
+							startY,
+							random(0, Math.PI * 2),
+							2,
+							options.tileWidth,
+							options.tileHeight);
+					}
+				}
+				else
+				{
+					if (tileNrX % 2 != 0)
+					{
+						// first agent
+						agent = new PulseAgent(
+							startX,
+							startY,
+							startX,
+							startY,
+							random(0, Math.PI * 2),
+							2,
+							options.tileWidth,
+							options.tileHeight);
+					}
+					else
+					{
+						// alt
+						agent = new PulseAgent(
+							startX,
+							startY,
+							startX,
+							startY,
+							random(0, Math.PI * 2),
+							2,
+							options.tileWidth,
+							options.tileHeight);
+					}
+				}
 
 				// set tile infos
 				// set tile on the left

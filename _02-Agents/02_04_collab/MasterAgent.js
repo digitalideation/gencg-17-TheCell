@@ -176,7 +176,7 @@ class MasterAgent
 				if (tileNrX % 2 == 0)
 				{
 					// first agent
-					agent = new ExampleAgent(
+					agent = new PulseAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
 						startX,
@@ -190,7 +190,7 @@ class MasterAgent
 				else
 				{
 					// alt
-					agent = new ExampleAgent(
+					agent = new PulseAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
 						startX,
@@ -207,7 +207,7 @@ class MasterAgent
 				if (tileNrX % 2 != 0)
 				{
 					// first agent
-					agent = new ExampleAgent(
+					agent = new PulseAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
 						startX,
@@ -221,7 +221,7 @@ class MasterAgent
 				else
 				{
 					// alt
-					agent = new ExampleAgent(
+					agent = new PulseAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
 						startX,
