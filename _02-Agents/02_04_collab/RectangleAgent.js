@@ -149,25 +149,25 @@ class RectangleAgent extends MasterAgent
 			if ((this.hitTop)
 				&& !this.hitTopWindowBorder)
 			{
-				this.angle = atan(this.vector.y/this.vector.x);
+				this.angle = this.vector.heading();
 				this.sendToNeighborCell(newX, newY);
 			}
 			else if ((this.hitLeft)
 				&& !(this.hitLeftWindowBorder))
 			{
-				this.angle = atan(this.vector.y/this.vector.x);
+				this.angle = this.vector.heading();
 				this.sendToNeighborCell(newX, newY);
 			}
 			else if ((this.hitBottom)
 				&& !(this.hitBottomWindowBorder))
 			{
-				this.angle = atan(this.vector.y/this.vector.x);
+				this.angle = this.vector.heading();
 				this.sendToNeighborCell(newX, newY+this.height);
 			}
 			else if ((this.hitRight)
 				&& !(this.hitRightWindowBorder))
 			{
-				this.angle = atan(this.vector.y/this.vector.x);
+				this.angle = this.vector.heading();
 				this.sendToNeighborCell(newX+this.width, newY);
 			}
 		}
