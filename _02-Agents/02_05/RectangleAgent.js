@@ -22,14 +22,15 @@ class RectangleAgent extends MasterAgent
 		this.positionX = spawnX;
 		this.positionY = spawnY;
 		this.vector = this.vectorFromAngle(angle);
-		//console.log(this.id+" :"+this.angle+"      VECTOR:"+this.vector);
-		//this.length = moveSpeed*0.1;
-		this.width = random(3,tileWidth/10);
-		this.height = random(3,tileHeight/10);
+		this.width = random(options.agentFatness,options.agentFatness*3);
+		this.height = random(options.agentFatness,options.agentFatness*3);
 		RectangleAgent.id++;
 		this.id = RectangleAgent.id;
 		this.SpawnBottom = true;
 		this.SpawnRight = true;
+		//detect if a collision happened
+		this.collisionHappened = false;
+		this.fatness = options.agentFatness;
 	}
 
 	vectorFromAngle(angle){
@@ -42,6 +43,11 @@ class RectangleAgent extends MasterAgent
 		{
 			return;
 		}
+		if(this.fatness != options.agentFatness){
+			this.fatness = options.agentFatness;
+			this.width = random(options.agentFatness*1.2,options.agentFatness*3.5);
+			this.height = random(options.agentFatness*1.2,options.agentFatness*3.5);
+		}
 		stroke(options.agentColor,options.agentColor,options.agentColor);
 		rect(this.positionX,this.positionY,this.width,this.height);
 	}
@@ -52,7 +58,6 @@ class RectangleAgent extends MasterAgent
 		{
 			return;
 		}
-
 		//this which can be used inside the foreach
 		let currentRectangle = this;
 		//checks for collisions and changes movement direction
@@ -85,9 +90,6 @@ class RectangleAgent extends MasterAgent
 			newY += this.vector.y*options.moveSpeed*0.5+random(0,2)-1;
 			this.collisionHappened = false;
 		}
-		// this must be after new positions checked
-		// otherwise agents spawned in new tiles
-		// will always hit borders at the start
 		this.checkBorders(newX, newY);
 		this.changeAngleBasedOnBorders();
 
@@ -334,4 +336,3 @@ class RectangleAgent extends MasterAgent
 	}
 }
 RectangleAgent.id = 0;
-RectangleAgent.collisionPointsArray = [];
