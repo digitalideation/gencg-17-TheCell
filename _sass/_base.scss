@@ -118,7 +118,7 @@ aside {
     }
   }
   @media (min-width: 768px) {
-    background-color: rgba(black, .7);
+    background-color: rgba(black, 0);
     border-color: rgba(white, .3);
     .navbar-header .navbar-brand {
       color: rgba(white, .7);
@@ -163,11 +163,15 @@ header {
   min-height: auto;
   @include background-cover;
   background-position: center;
-  background-image: url('../img/header.gif');
+  // background-image: url('../img/header.gif');
   text-align: center;
   color: white;
   .header-content {
-    position: relative;
+    position: absolute;
+    top: 55%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
     text-align: center;
     padding: 100px 15px 100px;
     width: 100%;
@@ -192,11 +196,6 @@ header {
   @media (min-width: 768px) {
     min-height: 100%;
     .header-content {
-      position: absolute;
-      top: 50%;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
       padding: 0 50px;
       .header-content-inner {
         max-width: 1000px;
@@ -358,8 +357,4 @@ img::-moz-selection {
 
 body {
   -webkit-tap-highlight-color: $theme-dark;
-}
-
-.dg.ac {
-    margin-top: 60px;
 }
