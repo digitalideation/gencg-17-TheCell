@@ -8,8 +8,8 @@ let options = {
 	timeToLive: 100,
 	// tileWidth: 200,
 	// tileHeight: 200,
-	tileWidth: 90,
-	tileHeight: 90,
+	tileWidth: 150,
+	tileHeight: 150,
 	agentColor: [66, 230, 220], //RGB
 	backgroundColor: [0, 0, 0], //RGB
 	backgroundAlpha: 30, //0 - 100
