@@ -28,6 +28,8 @@ class RectangleAgent extends MasterAgent
 		this.id = RectangleAgent.id;
 		this.SpawnBottom = true;
 		this.SpawnRight = true;
+		//detect if a collision happened
+		this.collisionHappened = false;
 	}
 
 	vectorFromAngle(angle){
@@ -50,12 +52,38 @@ class RectangleAgent extends MasterAgent
 		{
 			return;
 		}
-
+		//this which can be used inside the foreach
+		let currentRectangle = this;
+		//checks for collisions and changes movement direction
+		agents.forEach(function (ele, index, arr)
+		{
+			if (ele instanceof RectangleAgent)
+			{
+				if (ele.id != currentRectangle.id)
+				{
+					if(ele.id != currentRectangle.id &&
+						(currentRectangle.positionX <= ele.positionX+ele.width &&
+					 currentRectangle.positionX+currentRectangle.width >= ele.positionX &&
+					  currentRectangle.positionY <= ele.positionY + ele.height &&
+					   currentRectangle.positionY+currentRectangle.height >= ele.positionY))
+					{
+						currentRectangle.vector.x *= -1;
+						currentRectangle.vector.y *= -1;
+						currentRectangle.collisionHappened = true;
+					}
+				}
+			}
+		});
 		let newX;
 		let newY;
 
 		newX = this.positionX+this.vector.x*options.moveSpeed*0.5;
 		newY = this.positionY+this.vector.y*options.moveSpeed*0.5;
+		if(this.collisionHappened){
+			newX += this.vector.x*options.moveSpeed*0.5+random(0,2)-1;
+			newY += this.vector.y*options.moveSpeed*0.5+random(0,2)-1;
+			this.collisionHappened = false;
+		}
 		this.checkBorders(newX, newY);
 		this.changeAngleBasedOnBorders();
 

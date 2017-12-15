@@ -53,49 +53,38 @@ class RectangleAgent extends MasterAgent
 			return;
 		}
 
+		//this which can be used inside the foreach
+		let currentRectangle = this;
+		//checks for collisions and changes movement direction
+		agents.forEach(function (ele, index, arr)
+		{
+			if (ele instanceof RectangleAgent)
+			{
+				if (ele.id != currentRectangle.id)
+				{
+					if(ele.id != currentRectangle.id &&
+						(currentRectangle.positionX <= ele.positionX+ele.width &&
+					 currentRectangle.positionX+currentRectangle.width >= ele.positionX &&
+					  currentRectangle.positionY <= ele.positionY + ele.height &&
+					   currentRectangle.positionY+currentRectangle.height >= ele.positionY))
+					{
+						currentRectangle.vector.x *= -1;
+						currentRectangle.vector.y *= -1;
+						currentRectangle.collisionHappened = true;
+					}
+				}
+			}
+		});
 		let newX;
 		let newY;
-		/*
-		// only change blocked Agents angle if they are not send to neighbors
-		// and should not bounce
-		if (!options.sendToNeighbor && !options.bounceOffLocalBorder)
-		{
-			if (
-				cos(this.angle) < 0.01
-				&& cos(this.angle) > -0.01
-				&& ((this.points[this.points.length - 1].y
-					>= this.location.y + this.tileHeight / 2)
-					|| (this.points[this.points.length - 1].y
-					<= this.location.y - this.tileHeight / 2)))
-			{
-				// check if it is at the top or bottom middle and speed it up a bit
-				this.incrementAngle();
-			}
-			else if (
-				sin(this.angle) < 0.01
-				&& sin(this.angle) > -0.01
-				&& ((this.points[this.points.length - 1].x
-					>= this.location.x + this.tileWidth / 2)
-					|| (this.points[this.points.length - 1].x
-					<= this.location.x - this.tileWidth / 2)))
-			{
-				// check if it is at the left or right middle and speed it up a bit
-				this.incrementAngle();
-			}
-		}*/
-	/*	this.positionX += this.vector.x*this.length;
-		this.positionY += this.vector.y*this.length;
-		RectangleAgent.collisionPointsArray.push({id:this.id,x:this.positionX,y:this.positionY,width:this.width,height:this.height,vector:this.vector.copy()});
-	*/
+
 		newX = this.positionX+this.vector.x*options.moveSpeed*0.5;
 		newY = this.positionY+this.vector.y*options.moveSpeed*0.5;
-		RectangleAgent.collisionPointsArray.push({id:this.id,x:this.positionX,y:this.positionY,width:this.width,height:this.height,vector:this.vector.copy()});
-
-	/* 	newX = this.points[this.points.length - 1].x
-			+ (cos(this.angle) * this.moveSpeed);
-		newY = this.points[this.points.length - 1].y
-			+ (sin(this.angle) * this.moveSpeed);
-	*/
+		if(this.collisionHappened){
+			newX += this.vector.x*options.moveSpeed*0.5+random(0,2)-1;
+			newY += this.vector.y*options.moveSpeed*0.5+random(0,2)-1;
+			this.collisionHappened = false;
+		}
 		// this must be after new positions checked
 		// otherwise agents spawned in new tiles
 		// will always hit borders at the start
