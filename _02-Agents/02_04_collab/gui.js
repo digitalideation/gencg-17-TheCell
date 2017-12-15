@@ -1,6 +1,6 @@
 let options = {
-	randomSeed: 2018,
-	numberOfAgents: 1,
+	randomSeed: new Date().getTime() % 100000,
+	numberOfAgents: 3,
 	moveSpeed: 2,
 	// maxSpeed: 5,
 	agentFatness: 3,
@@ -32,7 +32,7 @@ window.onload = function()
 		.gui
 		.add(options, 'randomSeed')
 		.min(1)
-		.max(10000)
+		.max(100000)
 		.step(1);
 	let numberOfAgents = window
 		.gui

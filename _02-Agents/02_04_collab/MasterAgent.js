@@ -107,7 +107,6 @@ class MasterAgent
 	{
 		let cellinformation;
 
-		// TODO later: break this apart for exchangable neighbors
 		if (this.hitTop && this.hitRight)
 		{
 			// top right corner
@@ -149,7 +148,6 @@ class MasterAgent
 			// Bottom
 			cellinformation = this
 				.neighborCells[Agent.surroundingCellEnum.BOTTOM];
-			// console.log("hitBottom", this.location, cellinformation);
 		}
 		else if (this.hitLeft)
 		{
@@ -164,18 +162,21 @@ class MasterAgent
 			&& cellinformation.tileHeight
 			&& cellinformation.radius)
 		{
+			let agent;
 			let tileNrX = Math.floor(cellinformation.centerX
 				/ options.tileWidth);
 			let tileNrY = Math.floor(cellinformation.centerY
 				/ options.tileHeight);
+			let spreading = map(
+				sin(options.randomSeed + tileNrX * tileNrY),
+				-1,
+				1,
+				0,
+				4);
 
-			let agent;
-
-			if (tileNrY % 2 == 0)
+			switch(Math.floor(spreading % 4))
 			{
-				if (tileNrX % 2 == 0)
-				{
-					// first agent
+				case 0:
 					agent = new ThreadAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
@@ -186,10 +187,8 @@ class MasterAgent
 						cellinformation.tileWidth,
 						cellinformation.tileHeight,
 						cellinformation.radius);
-				}
-				else
-				{
-					// alt
+				break;
+				case 1:
 					agent = new PulseAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
@@ -200,13 +199,8 @@ class MasterAgent
 						cellinformation.tileWidth,
 						cellinformation.tileHeight,
 						cellinformation.radius);
-				}
-			}
-			else
-			{
-				if (tileNrX % 2 != 0)
-				{
-					// first agent
+				break;
+				case 2:
 					agent = new RectangleAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
@@ -217,10 +211,8 @@ class MasterAgent
 						cellinformation.tileWidth,
 						cellinformation.tileHeight,
 						cellinformation.radius);
-				}
-				else
-				{
-					// alt
+				break;
+				case 3:
 					agent = new WormAgent(
 						cellinformation.centerX,
 						cellinformation.centerY,
@@ -231,8 +223,76 @@ class MasterAgent
 						cellinformation.tileWidth,
 						cellinformation.tileHeight,
 						cellinformation.radius);
-				}
+				break;
 			}
+
+			// let tileNrX = Math.floor(cellinformation.centerX
+			// 	/ options.tileWidth);
+			// let tileNrY = Math.floor(cellinformation.centerY
+			// 	/ options.tileHeight);
+
+			// if (tileNrY % 2 == 0)
+			// {
+			// 	if (tileNrX % 2 == 0)
+			// 	{
+			// 		// first agent
+			// 		agent = new ThreadAgent(
+			// 			cellinformation.centerX,
+			// 			cellinformation.centerY,
+			// 			startX,
+			// 			startY,
+			// 			this.angle,
+			// 			options.moveSpeed,
+			// 			cellinformation.tileWidth,
+			// 			cellinformation.tileHeight,
+			// 			cellinformation.radius);
+			// 	}
+			// 	else
+			// 	{
+			// 		// alt
+			// 		agent = new PulseAgent(
+			// 			cellinformation.centerX,
+			// 			cellinformation.centerY,
+			// 			startX,
+			// 			startY,
+			// 			this.angle,
+			// 			options.moveSpeed,
+			// 			cellinformation.tileWidth,
+			// 			cellinformation.tileHeight,
+			// 			cellinformation.radius);
+			// 	}
+			// }
+			// else
+			// {
+			// 	if (tileNrX % 2 != 0)
+			// 	{
+			// 		// first agent
+			// 		agent = new RectangleAgent(
+			// 			cellinformation.centerX,
+			// 			cellinformation.centerY,
+			// 			startX,
+			// 			startY,
+			// 			this.angle,
+			// 			options.moveSpeed,
+			// 			cellinformation.tileWidth,
+			// 			cellinformation.tileHeight,
+			// 			cellinformation.radius);
+			// 	}
+			// 	else
+			// 	{
+			// 		// alt
+			// 		agent = new WormAgent(
+			// 			cellinformation.centerX,
+			// 			cellinformation.centerY,
+			// 			startX,
+			// 			startY,
+			// 			this.angle,
+			// 			options.moveSpeed,
+			// 			cellinformation.tileWidth,
+			// 			cellinformation.tileHeight,
+			// 			cellinformation.radius);
+			// 	}
+			// }
 
 			// check for borders and update all neighborcells
 			// top border

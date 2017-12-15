@@ -138,26 +138,29 @@ function spawnAgents()
 	{
 		for(let x = 0; x * options.tileWidth < windowWidth; x++)
 		{
-			let agent;
 			let startX;
 			let startY;
 
 			startX = x * options.tileWidth + options.tileWidth / 2;
 			startY = y * options.tileHeight + options.tileHeight / 2;
+
 			for (let i = 0; i < options.numberOfAgents; i++)
 			{
+				let agent;
 				let tileNrX = Math.floor(startX
-				/ options.tileWidth);
+					/ options.tileWidth);
 				let tileNrY = Math.floor(startY
 					/ options.tileHeight);
+				let spreading = map(
+					sin(options.randomSeed + tileNrX * tileNrY),
+					-1,
+					1,
+					0,
+					4);
 
-				let agent;
-
-				if (tileNrY % 2 == 0)
+				switch(Math.floor(spreading % 4))
 				{
-					if (tileNrX % 2 == 0)
-					{
-						// first agent
+					case 0:
 						agent = new ThreadAgent(
 							startX,
 							startY,
@@ -167,10 +170,8 @@ function spawnAgents()
 							options.moveSpeed,
 							options.tileWidth,
 							options.tileHeight);
-					}
-					else
-					{
-						// alt
+					break;
+					case 1:
 						agent = new PulseAgent(
 							startX,
 							startY,
@@ -180,13 +181,8 @@ function spawnAgents()
 							options.moveSpeed,
 							options.tileWidth,
 							options.tileHeight);
-					}
-				}
-				else
-				{
-					if (tileNrX % 2 != 0)
-					{
-						// first agent
+					break;
+					case 2:
 						agent = new RectangleAgent(
 							startX,
 							startY,
@@ -196,10 +192,8 @@ function spawnAgents()
 							options.moveSpeed,
 							options.tileWidth,
 							options.tileHeight);
-					}
-					else
-					{
-						// alt
+					break;
+					case 3:
 						agent = new WormAgent(
 							startX,
 							startY,
@@ -209,8 +203,73 @@ function spawnAgents()
 							options.moveSpeed,
 							options.tileWidth,
 							options.tileHeight);
-					}
+					break;
 				}
+				// let tileNrX = Math.floor(startX
+				// / options.tileWidth);
+				// let tileNrY = Math.floor(startY
+				// 	/ options.tileHeight);
+
+				// let agent;
+
+				// if (tileNrY % 2 == 0)
+				// {
+				// 	if (tileNrX % 2 == 0)
+				// 	{
+				// 		// first agent
+				// 		agent = new ThreadAgent(
+				// 			startX,
+				// 			startY,
+				// 			startX,
+				// 			startY,
+				// 			random(0, Math.PI * 2),
+				// 			options.moveSpeed,
+				// 			options.tileWidth,
+				// 			options.tileHeight);
+				// 	}
+				// 	else
+				// 	{
+				// 		// alt
+				// 		agent = new PulseAgent(
+				// 			startX,
+				// 			startY,
+				// 			startX,
+				// 			startY,
+				// 			random(0, Math.PI * 2),
+				// 			options.moveSpeed,
+				// 			options.tileWidth,
+				// 			options.tileHeight);
+				// 	}
+				// }
+				// else
+				// {
+				// 	if (tileNrX % 2 != 0)
+				// 	{
+				// 		// first agent
+				// 		agent = new RectangleAgent(
+				// 			startX,
+				// 			startY,
+				// 			startX,
+				// 			startY,
+				// 			random(0, Math.PI * 2),
+				// 			options.moveSpeed,
+				// 			options.tileWidth,
+				// 			options.tileHeight);
+				// 	}
+				// 	else
+				// 	{
+				// 		// alt
+				// 		agent = new WormAgent(
+				// 			startX,
+				// 			startY,
+				// 			startX,
+				// 			startY,
+				// 			random(0, Math.PI * 2),
+				// 			options.moveSpeed,
+				// 			options.tileWidth,
+				// 			options.tileHeight);
+				// 	}
+				// }
 
 				// set tile infos
 				// set tile on the left
