@@ -1,6 +1,6 @@
 let options = {
 	randomSeed: 2018,
-	numberOfAgents: 20,
+	numberOfAgents: 70,
 	moveSpeed: 2,
 	// maxSpeed: 5,
 	agentFatness: 3,
@@ -10,8 +10,8 @@ let options = {
 	// tileHeight: 200,
 	tileWidth: 150,
 	tileHeight: 150,
-	agentColor: [66, 230, 220], //RGB
-	backgroundColor: [0, 0, 0], //RGB
+	agentColor: [60, 59, 43], //RGB
+	backgroundColor: [178, 185, 169], //RGB
 	backgroundAlpha: 30, //0 - 100
 	randomPlacement: false,
 	useRadius: false,
@@ -38,7 +38,7 @@ window.onload = function()
 		.gui
 		.add(options, 'numberOfAgents')
 		.min(1)
-		.max(100)
+		.max(300)
 		.step(1);
 	let agentFatness = window
 		.gui

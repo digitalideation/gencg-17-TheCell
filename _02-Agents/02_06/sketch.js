@@ -17,6 +17,8 @@ function setup()
 	randomSeed(options.randomSeed);
 
 	spawnAgents();
+	document.getElementById("defaultCanvas0")
+		.addEventListener("click", spawnAgentClickEvent);
 
 	background(options.backgroundColor, options.backgroundAlpha);
 }
@@ -192,6 +194,163 @@ function spawnAgents()
 	}
 }
 
+function spawnAgentClickEvent()
+{
+	//center of current tile
+	let currentTileCenterX =
+		options.tileWidth *
+		Math.floor(mouseX/options.tileWidth)
+		+ options.tileWidth/2;
+	let currentTileCenterY =
+		options.tileHeight *
+		Math.floor(mouseY/options.tileHeight)
+		+ options.tileHeight/2;
+
+	let cellinformation = new Tileinformation(
+				currentTileCenterX,
+				currentTileCenterY,
+				options.tileWidth,
+				options.tileHeight,
+				1);
+
+	if (cellinformation.centerX
+		&& cellinformation.centerY
+		&& cellinformation.tileWidth
+		&& cellinformation.tileHeight
+		&& cellinformation.radius)
+	{
+		let tileNrX = Math.floor(cellinformation.centerX
+			/ options.tileWidth);
+		let tileNrY = Math.floor(cellinformation.centerY
+			/ options.tileHeight);
+
+		let agent;
+
+		switch(Math.floor(random(0,4)))
+		{
+			case 0:
+				agent = new RectangleAgent(
+					windowWidth / 2,
+					windowHeight / 2,
+					mouseX,
+					mouseY,
+					random(0, Math.PI * 2),
+					options.moveSpeed,
+					windowWidth,
+					windowHeight);
+				break;
+			case 1:
+				agent = new ThreadAgent(
+					windowWidth / 2,
+					windowHeight / 2,
+					mouseX,
+					mouseY,
+					random(0, Math.PI * 2),
+					options.moveSpeed,
+					windowWidth,
+					windowHeight);
+				break;
+			case 2:
+				agent = new PulseAgent(
+					windowWidth / 2,
+					windowHeight / 2,
+					mouseX,
+					mouseY,
+					random(0, Math.PI * 2),
+					options.moveSpeed,
+					windowWidth,
+					windowHeight);
+				break;
+			case 3:
+				agent = new WormAgent(
+					windowWidth / 2,
+					windowHeight / 2,
+					mouseX,
+					mouseY,
+					random(0, Math.PI * 2),
+					options.moveSpeed,
+					windowWidth,
+					windowHeight);
+				break;
+		}
+
+		// check for borders and update all neighborcells
+		// top border
+		agent.neighborCells[Agent.surroundingCellEnum.TOP] =
+			new Tileinformation(
+				agent.location.x,
+				agent.location.y - agent.tileHeight,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// set right border
+		agent.neighborCells[Agent.surroundingCellEnum.RIGHT] =
+			new Tileinformation(
+				agent.location.x + agent.tileWidth,
+				agent.location.y,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// set Bottom border
+		agent.neighborCells[Agent.surroundingCellEnum.BOTTOM] =
+			new Tileinformation(
+				agent.location.x,
+				agent.location.y + agent.tileHeight,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// left border
+		agent.neighborCells[Agent.surroundingCellEnum.LEFT] =
+			new Tileinformation(
+				agent.location.x - agent.tileWidth,
+				agent.location.y,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// edge Cases
+		// top right Border
+		agent.neighborCells[Agent.surroundingCellEnum.TOPRIGHTCORNER] =
+			new Tileinformation(
+				agent.location.x + agent.tileWidth,
+				agent.location.y - agent.tileHeight,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// bottom right
+		agent.neighborCells[Agent.surroundingCellEnum.BOTTOMRIGHTCORNER] =
+			new Tileinformation(
+				agent.location.x + agent.tileWidth,
+				agent.location.y + agent.tileHeight,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// bottom left
+		agent.neighborCells[Agent.surroundingCellEnum.BOTTOMLEFTCORNER] =
+			new Tileinformation(
+				agent.location.x - agent.tileWidth,
+				agent.location.y + agent.tileHeight,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// top left
+		agent.neighborCells[Agent.surroundingCellEnum.TOPLEFTCORNER] =
+			new Tileinformation(
+				agent.location.x - agent.tileWidth,
+				agent.location.y - agent.tileHeight,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		agents.push(agent);
+	}
+}
 // Tools
 
 // resize canvas when the window is resized
