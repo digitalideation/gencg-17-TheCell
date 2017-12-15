@@ -8,14 +8,12 @@ let options = {
 	// tileHeight: 200,
 	tileWidth: 250,
 	tileHeight: 250,
-	agentColor: [66, 230, 220], //RGB
-	backgroundColor: [0, 0, 0], //RGB
-	backgroundAlpha: 3, //0 - 100
-	randomPlacement: false,
-	useRadius: false,
+	agentColor: [230, 230, 65], //RGB
+	backgroundColor: [60, 10, 10], //RGB
+	backgroundAlpha: 1, //0 - 100
 	sendToNeighbor: true,
 	bounceOffWindowBorder: true,
-	bounceOffLocalBorder: false,
+	bounceOffLocalBorder: true,
 };
 
 window.somethingChanged = true;
@@ -61,12 +59,6 @@ window.onload = function()
 		.min(50)
 		.max(1000)
 		.step(1);
-	let randomPlacement = window
-		.gui
-		.add(options, "randomPlacement");
-	let useRadius = window
-		.gui
-		.add(options, "useRadius");
 	let sendToNeighbor = window
 		.gui
 		.add(options, "sendToNeighbor");
@@ -82,8 +74,6 @@ window.onload = function()
 	controllers.push(tileHeight);
 	// controllers.push(moveSpeed);
 	controllers.push(backgroundAlpha);
-	controllers.push(randomPlacement);
-	controllers.push(useRadius);
 	controllers.push(sendToNeighbor);
 	controllers.push(bounceOffWindowBorder);
 	controllers.push(bounceOffLocalBorder);
