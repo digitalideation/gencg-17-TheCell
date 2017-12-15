@@ -159,171 +159,178 @@ function cleanDeadAgents(arrayWithAgents, returnObjects = false)
 		return killCount;
 	}
 }
-function spawnAgentClickEvent(){
-		//center of current tile
-		let currentTileCenterX =options.tileWidth* Math.floor(mouseX/options.tileWidth)+options.tileWidth/2;
-		let currentTileCenterY = options.tileHeight*Math.floor(mouseY/options.tileHeight)+options.tileHeight/2;
 
-		let cellinformation = new Tileinformation(
-					currentTileCenterX,
-					currentTileCenterY,
-					options.tileWidth,
-					options.tileHeight,
-					1);
+function spawnAgentClickEvent()
+{
+	//center of current tile
+	let currentTileCenterX =
+		options.tileWidth *
+		Math.floor(mouseX/options.tileWidth)
+		+ options.tileWidth/2;
+	let currentTileCenterY =
+		options.tileHeight *
+		Math.floor(mouseY/options.tileHeight)
+		+ options.tileHeight/2;
 
+	let cellinformation = new Tileinformation(
+				currentTileCenterX,
+				currentTileCenterY,
+				options.tileWidth,
+				options.tileHeight,
+				1);
 
-		if (cellinformation.centerX
-			&& cellinformation.centerY
-			&& cellinformation.tileWidth
-			&& cellinformation.tileHeight
-			&& cellinformation.radius)
+	if (cellinformation.centerX
+		&& cellinformation.centerY
+		&& cellinformation.tileWidth
+		&& cellinformation.tileHeight
+		&& cellinformation.radius)
+	{
+		let tileNrX = Math.floor(cellinformation.centerX
+			/ options.tileWidth);
+		let tileNrY = Math.floor(cellinformation.centerY
+			/ options.tileHeight);
+
+		let agent;
+
+		if (tileNrY % 2 == 0)
 		{
-			let tileNrX = Math.floor(cellinformation.centerX
-				/ options.tileWidth);
-			let tileNrY = Math.floor(cellinformation.centerY
-				/ options.tileHeight);
-
-			let agent;
-
-			if (tileNrY % 2 == 0)
+			if (tileNrX % 2 == 0)
 			{
-				if (tileNrX % 2 == 0)
-				{
-					// first agent
-					agent = new ThreadAgent(
-						cellinformation.centerX,
-						cellinformation.centerY,
-						mouseX,
-						mouseY,
-						this.angle,
-						options.moveSpeed,
-						cellinformation.tileWidth,
-						cellinformation.tileHeight,
-						cellinformation.radius);
-				}
-				else
-				{
-					// alt
-					agent = new PulseAgent(
-						cellinformation.centerX,
-						cellinformation.centerY,
-						mouseX,
-						mouseY,
-						this.angle,
-						options.moveSpeed,
-						cellinformation.tileWidth,
-						cellinformation.tileHeight,
-						cellinformation.radius);
-				}
+				// first agent
+				agent = new ThreadAgent(
+					cellinformation.centerX,
+					cellinformation.centerY,
+					mouseX,
+					mouseY,
+					this.angle,
+					options.moveSpeed,
+					cellinformation.tileWidth,
+					cellinformation.tileHeight,
+					cellinformation.radius);
 			}
 			else
 			{
-				if (tileNrX % 2 != 0)
-				{
-					// first agent
-					agent = new RectangleAgent(
-						cellinformation.centerX,
-						cellinformation.centerY,
-						mouseX,
-						mouseY,
-						this.angle,
-						options.moveSpeed,
-						cellinformation.tileWidth,
-						cellinformation.tileHeight,
-						cellinformation.radius);
-				}
-				else
-				{
-					// alt
-					agent = new WormAgent(
-						cellinformation.centerX,
-						cellinformation.centerY,
-						mouseX,
-						mouseY,
-						this.angle,
-						options.moveSpeed,
-						cellinformation.tileWidth,
-						cellinformation.tileHeight,
-						cellinformation.radius);
-				}
+				// alt
+				agent = new PulseAgent(
+					cellinformation.centerX,
+					cellinformation.centerY,
+					mouseX,
+					mouseY,
+					this.angle,
+					options.moveSpeed,
+					cellinformation.tileWidth,
+					cellinformation.tileHeight,
+					cellinformation.radius);
 			}
-
-			// check for borders and update all neighborcells
-			// top border
-			agent.neighborCells[Agent.surroundingCellEnum.TOP] =
-				new Tileinformation(
-					agent.location.x,
-					agent.location.y - agent.tileHeight,
-					agent.tileWidth,
-					agent.tileHeight,
-					agent.radius);
-
-			// set right border
-			agent.neighborCells[Agent.surroundingCellEnum.RIGHT] =
-				new Tileinformation(
-					agent.location.x + agent.tileWidth,
-					agent.location.y,
-					agent.tileWidth,
-					agent.tileHeight,
-					agent.radius);
-
-			// set Bottom border
-			agent.neighborCells[Agent.surroundingCellEnum.BOTTOM] =
-				new Tileinformation(
-					agent.location.x,
-					agent.location.y + agent.tileHeight,
-					agent.tileWidth,
-					agent.tileHeight,
-					agent.radius);
-
-			// left border
-			agent.neighborCells[Agent.surroundingCellEnum.LEFT] =
-				new Tileinformation(
-					agent.location.x - agent.tileWidth,
-					agent.location.y,
-					agent.tileWidth,
-					agent.tileHeight,
-					agent.radius);
-
-			// edge Cases
-			// top right Border
-			agent.neighborCells[Agent.surroundingCellEnum.TOPRIGHTCORNER] =
-				new Tileinformation(
-					agent.location.x + agent.tileWidth,
-					agent.location.y - agent.tileHeight,
-					agent.tileWidth,
-					agent.tileHeight,
-					agent.radius);
-
-			// bottom right
-			agent.neighborCells[Agent.surroundingCellEnum.BOTTOMRIGHTCORNER] =
-				new Tileinformation(
-					agent.location.x + agent.tileWidth,
-					agent.location.y + agent.tileHeight,
-					agent.tileWidth,
-					agent.tileHeight,
-					agent.radius);
-
-			// bottom left
-			agent.neighborCells[Agent.surroundingCellEnum.BOTTOMLEFTCORNER] =
-				new Tileinformation(
-					agent.location.x - agent.tileWidth,
-					agent.location.y + agent.tileHeight,
-					agent.tileWidth,
-					agent.tileHeight,
-					agent.radius);
-
-			// top left
-			agent.neighborCells[Agent.surroundingCellEnum.TOPLEFTCORNER] =
-				new Tileinformation(
-					agent.location.x - agent.tileWidth,
-					agent.location.y - agent.tileHeight,
-					agent.tileWidth,
-					agent.tileHeight,
-					agent.radius);
-
-			agents.push(agent);
 		}
+		else
+		{
+			if (tileNrX % 2 != 0)
+			{
+				// first agent
+				agent = new RectangleAgent(
+					cellinformation.centerX,
+					cellinformation.centerY,
+					mouseX,
+					mouseY,
+					this.angle,
+					options.moveSpeed,
+					cellinformation.tileWidth,
+					cellinformation.tileHeight,
+					cellinformation.radius);
+			}
+			else
+			{
+				// alt
+				agent = new WormAgent(
+					cellinformation.centerX,
+					cellinformation.centerY,
+					mouseX,
+					mouseY,
+					this.angle,
+					options.moveSpeed,
+					cellinformation.tileWidth,
+					cellinformation.tileHeight,
+					cellinformation.radius);
+			}
+		}
+
+		// check for borders and update all neighborcells
+		// top border
+		agent.neighborCells[Agent.surroundingCellEnum.TOP] =
+			new Tileinformation(
+				agent.location.x,
+				agent.location.y - agent.tileHeight,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// set right border
+		agent.neighborCells[Agent.surroundingCellEnum.RIGHT] =
+			new Tileinformation(
+				agent.location.x + agent.tileWidth,
+				agent.location.y,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// set Bottom border
+		agent.neighborCells[Agent.surroundingCellEnum.BOTTOM] =
+			new Tileinformation(
+				agent.location.x,
+				agent.location.y + agent.tileHeight,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// left border
+		agent.neighborCells[Agent.surroundingCellEnum.LEFT] =
+			new Tileinformation(
+				agent.location.x - agent.tileWidth,
+				agent.location.y,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// edge Cases
+		// top right Border
+		agent.neighborCells[Agent.surroundingCellEnum.TOPRIGHTCORNER] =
+			new Tileinformation(
+				agent.location.x + agent.tileWidth,
+				agent.location.y - agent.tileHeight,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// bottom right
+		agent.neighborCells[Agent.surroundingCellEnum.BOTTOMRIGHTCORNER] =
+			new Tileinformation(
+				agent.location.x + agent.tileWidth,
+				agent.location.y + agent.tileHeight,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// bottom left
+		agent.neighborCells[Agent.surroundingCellEnum.BOTTOMLEFTCORNER] =
+			new Tileinformation(
+				agent.location.x - agent.tileWidth,
+				agent.location.y + agent.tileHeight,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		// top left
+		agent.neighborCells[Agent.surroundingCellEnum.TOPLEFTCORNER] =
+			new Tileinformation(
+				agent.location.x - agent.tileWidth,
+				agent.location.y - agent.tileHeight,
+				agent.tileWidth,
+				agent.tileHeight,
+				agent.radius);
+
+		agents.push(agent);
+	}
 }
 
 function spawnAgents()
