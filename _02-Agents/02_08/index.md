@@ -1,6 +1,6 @@
 ---
 layout: sketch
-title: "multiagents"
+title: "noisemap"
 category: "Experiment"
 thumb_name: "thumb.jpg"
 includes:
