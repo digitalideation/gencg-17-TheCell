@@ -166,102 +166,7 @@ class NoiseAgent extends MasterAgent
 		this.checkBorders(newX, newY);
 		this.changeAngleBasedOnBorders();
 
-		if (this.useRadius)
-		{
-			let aSquared = Math.pow(Math.abs(newX - this.location.x), 2);
-			let bSquared = Math.pow(Math.abs(newY - this.location.y), 2);
-			let cSquared = Math.pow(this.radius, 2);
-			if (aSquared + bSquared < cSquared)
-			{
-				// all normal
-			}
-			else
-			{
-				// set the pos back a step
-				newX = this.points[this.points.length - 1].x;
-				newY = this.points[this.points.length - 1].y;
-
-				if (
-					this.angle > Math.PI / 2
-					&& this.angle < Math.PI * 3/2)
-				{
-					this.incrementAngle();
-				}
-				else if ((this.angle < Math.PI / 2)
-					|| this.angle > Math.PI * 3/2)
-				{
-					this.decrementAngle();
-				}
-
-				// kill
-				this.agentAlive = false;
-
-				/*
-				if (this.angle > 0
-					&& (this.angle < Math.PI
-						|| this.angle > Math.PI * 3/2))
-				{
-					this.decrementAngle();
-				}
-				else
-					*/
-
-				// if (this.angle >= 0
-				// 	&& this.angle < (Math.PI / 2))
-				// {
-				// 	// bottom right direction
-				// 	// this.angle += angleStep;
-				// 	this.incrementAngle();
-				// }
-				// else if (this.angle >= (Math.PI / 2)
-				// 	&& this.angle < Math.PI)
-				// {
-				// 	// bottom left direction
-				// 	// this.angle += angleStep;
-				// 	this.incrementAngle();
-				// }
-				// else if (this.angle >= Math.PI
-				// 	&& this.angle < (2 * Math.PI * 2 / 3))
-				// {
-				// 	// top left direction
-				// 	// this.angle -= angleStep;
-				// 	this.incrementAngle();
-				// }
-				// else if (this.angle >= (2 * Math.PI * 2 / 3)
-				// 	&& this.angle < Math.PI * 2)
-				// {
-				// 	// top right direction
-				// 	// this.angle += angleStep;
-				// 	this.incrementAngle();
-				// }
-				// else
-				// {
-				// 	this.angle += angleStep;
-				// }
-			}
-			// if (newX < (this.location.x - this.radius))
-			// {
-			// 	newX = this.location.x - this.radius;
-			// }
-			// else if (newX > (this.location.x + this.radius))
-			// {
-			// 	newX = this.location.x + this.radius;
-			// }
-
-			// if (newY < (this.location.y - this.radius))
-			// {
-			// 	newY = this.location.y - this.radius;
-			// }
-			// else if (newY > (this.location.y + this.radius))
-			// {
-			// 	newY = this.location.y + this.radius;
-			// }
-			if (this.angle > Math.PI * 2 || this.angle < 0)
-			{
-				this.agentAlive = false;
-			}
-		}
-		else
+		if (!this.useRadius)
 		{
 			if (options.respawnOnWallHit && (this.hitTop
 				|| this.hitRight
@@ -330,8 +235,6 @@ class NoiseAgent extends MasterAgent
 					this.sendToNeighborCell(newX, newY);
 				}
 			}
-
-			this.customBehaviour();
 		}
 
 		let newP = createVector(newX, newY);
@@ -346,64 +249,6 @@ class NoiseAgent extends MasterAgent
 	decrementAngle()
 	{
 		this.angle -= this.angleStep;
-	}
-
-	checkBorders(xCoord, yCoord)
-	{
-		this.hitTop = false;
-		this.hitRight = false;
-		this.hitBottom = false;
-		this.hitLeft = false;
-		this.hitTopWindowBorder = false;
-		this.hitRightWindowBorder = false;
-		this.hitBottomWindowBorder = false;
-		this.hitLeftWindowBorder = false;
-
-		// check if hit a window border
-		if (xCoord > windowWidth)
-		{
-			this.hitRightWindowBorder = true;
-		}
-		else if (xCoord < 0)
-		{
-			this.hitLeftWindowBorder = true;
-		}
-
-		if (yCoord > windowHeight)
-		{
-			this.hitBottomWindowBorder = true;
-		}
-		else if (yCoord < 0)
-		{
-			this.hitTopWindowBorder = true;
-		}
-
-		if (this.useRadius)
-		{
-			// TODO
-		}
-		else
-		{
-			// left local border
-			if (xCoord < (this.location.x - this.tileWidth / 2))
-			{
-				this.hitLeft = true;
-			}
-			else if (xCoord > (this.location.x + this.tileWidth / 2))
-			{
-				this.hitRight = true;
-			}
-
-			// top local Border
-			if (yCoord < (this.location.y - this.tileHeight / 2))
-			{
-				this.hitTop = true;
-			}
-			else if (yCoord > (this.location.y + this.tileHeight / 2))
-			{
-				this.hitBottom = true;
-			}
-		}
 	}
 
 	changeAngleBasedOnBorders()
@@ -505,10 +350,5 @@ class NoiseAgent extends MasterAgent
 				this.angle = random(0, Math.PI / 2);
 			}
 		}
-	}
-
-	customBehaviour()
-	{
-		// Agent custom behaviour comes here
 	}
 }
