@@ -15,6 +15,12 @@ Agent.surroundingCellEnum = {
 	BOTTOMRIGHTCORNER: 7
 }
 
+/**
+ * Class for Tileinformation.
+ *
+ * @class      Tileinformation (name)
+ * Structure to hold information about a Tile
+ */
 class Tileinformation
 {
 	constructor(
