@@ -5,34 +5,6 @@ let mouseInputMode = 0;
 //let cycleInterval;
 let agents = [];
 
-class Tileinformation
-{
-	constructor(
-		centerX,
-		centerY,
-		tileWidth = options.tileWidth,
-		tileHeight = options.tileHeight,
-		radius = options.tileWidth / 2)
-	{
-		this.centerX = centerX,
-		this.centerY = centerY,
-		this.tileWidth = tileWidth;
-		this.tileHeight = tileHeight;
-		this.radius = radius;
-	}
-}
-
-Agent.surroundingCellEnum = {
-	TOPLEFTCORNER: 0,
-	TOP: 1,
-	TOPRIGHTCORNER: 2,
-	LEFT: 3,
-	RIGHT: 4,
-	BOTTOMLEFTCORNER: 5,
-	BOTTOM: 6,
-	BOTTOMRIGHTCORNER: 7
-}
-
 function setup()
 {
 	// Canvas setup

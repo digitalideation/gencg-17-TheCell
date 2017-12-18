@@ -1,8 +1,6 @@
 "use strict";
 
-// Global var
 let mouseInputMode = 0;
-//let cycleInterval;
 let agents = [];
 
 function setup()
