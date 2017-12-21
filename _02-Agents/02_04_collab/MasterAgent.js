@@ -15,6 +15,12 @@ Agent.surroundingCellEnum = {
 	BOTTOMRIGHTCORNER: 7
 }
 
+/**
+ * Class for Tileinformation.
+ *
+ * @class      Tileinformation (name)
+ * Structure to hold information about a Tile
+ */
 class Tileinformation
 {
 	constructor(
@@ -32,6 +38,13 @@ class Tileinformation
 	}
 }
 
+/**
+ * Class for master agent.
+ * This is a pseudointerface and has to be extended.
+ * Update the drawLocation and customize the updateCycle
+ *
+ * @class      MasterAgent (name)
+ */
 class MasterAgent
 {
 	constructor(
@@ -78,6 +91,9 @@ class MasterAgent
 			middlePointY);
 	}
 
+	/**
+	 * Gets called to draw the Agent.
+	 */
 	drawLocation()
 	{
 		if (!this.agentAlive)
@@ -86,6 +102,9 @@ class MasterAgent
 		}
 	}
 
+	/**
+	 * The behaviour for each cycle is calculated and saved in here
+	 */
 	updateCycle()
 	{
 		if (!this.agentAlive)
@@ -94,15 +113,91 @@ class MasterAgent
 		}
 	}
 
+	/**
+	 * Resets and checks local and window borders.
+	 * Needs to be called for setNeighbor and to have updated variables
+	 * in updateCycle
+	 *
+	 * @param      {Integer}  xCoord  The x coordinate for checking
+	 * @param      {Integer}  yCoord  The y coordinate for checking
+	 */
 	checkBorders(xCoord, yCoord)
 	{
+		this.hitTop = false;
+		this.hitRight = false;
+		this.hitBottom = false;
+		this.hitLeft = false;
+		this.hitTopWindowBorder = false;
+		this.hitRightWindowBorder = false;
+		this.hitBottomWindowBorder = false;
+		this.hitLeftWindowBorder = false;
+
+		// check if hit a window border
+		if (xCoord > windowWidth)
+		{
+			this.hitRightWindowBorder = true;
+		}
+		else if (xCoord < 0)
+		{
+			this.hitLeftWindowBorder = true;
+		}
+
+		if (yCoord > windowHeight)
+		{
+			this.hitBottomWindowBorder = true;
+		}
+		else if (yCoord < 0)
+		{
+			this.hitTopWindowBorder = true;
+		}
+
+		if (this.useRadius)
+		{
+			// TODO
+		}
+		else
+		{
+			// left local border
+			if (xCoord < (this.location.x - this.tileWidth / 2))
+			{
+				this.hitLeft = true;
+			}
+			else if (xCoord > (this.location.x + this.tileWidth / 2))
+			{
+				this.hitRight = true;
+			}
+
+			// top local Border
+			if (yCoord < (this.location.y - this.tileHeight / 2))
+			{
+				this.hitTop = true;
+			}
+			else if (yCoord > (this.location.y + this.tileHeight / 2))
+			{
+				this.hitBottom = true;
+			}
+		}
 	}
 
+	/**
+	 * Sets a Neighborcell
+	 *
+	 * @param      {Enumeration}  neighborNumber   The neighbor number
+	 * @param      {Tileinformation Class}  tileinformation  The tileinformation
+	 */
 	setNeighbor(neighborNumber, tileinformation)
 	{
 		this.neighborCells[neighborNumber] = tileinformation;
 	}
 
+	/**
+	 * chooses which cell it should send the agent information to based on
+	 * checkBorders, creates the Agent based on the spawnLogic,
+	 * updates the new Agents surroundingCells and kills itself
+	 *
+	 * @param      {Integer}  startX  The start x of the new agent
+	 * @param      {Integer}  startY  The start y of the new agent
+	 */
 	sendToNeighborCell(startX, startY)
 	{
 		let cellinformation;
@@ -225,74 +320,6 @@ class MasterAgent
 						cellinformation.radius);
 				break;
 			}
-
-			// let tileNrX = Math.floor(cellinformation.centerX
-			// 	/ options.tileWidth);
-			// let tileNrY = Math.floor(cellinformation.centerY
-			// 	/ options.tileHeight);
-
-			// if (tileNrY % 2 == 0)
-			// {
-			// 	if (tileNrX % 2 == 0)
-			// 	{
-			// 		// first agent
-			// 		agent = new ThreadAgent(
-			// 			cellinformation.centerX,
-			// 			cellinformation.centerY,
-			// 			startX,
-			// 			startY,
-			// 			this.angle,
-			// 			options.moveSpeed,
-			// 			cellinformation.tileWidth,
-			// 			cellinformation.tileHeight,
-			// 			cellinformation.radius);
-			// 	}
-			// 	else
-			// 	{
-			// 		// alt
-			// 		agent = new PulseAgent(
-			// 			cellinformation.centerX,
-			// 			cellinformation.centerY,
-			// 			startX,
-			// 			startY,
-			// 			this.angle,
-			// 			options.moveSpeed,
-			// 			cellinformation.tileWidth,
-			// 			cellinformation.tileHeight,
-			// 			cellinformation.radius);
-			// 	}
-			// }
-			// else
-			// {
-			// 	if (tileNrX % 2 != 0)
-			// 	{
-			// 		// first agent
-			// 		agent = new RectangleAgent(
-			// 			cellinformation.centerX,
-			// 			cellinformation.centerY,
-			// 			startX,
-			// 			startY,
-			// 			this.angle,
-			// 			options.moveSpeed,
-			// 			cellinformation.tileWidth,
-			// 			cellinformation.tileHeight,
-			// 			cellinformation.radius);
-			// 	}
-			// 	else
-			// 	{
-			// 		// alt
-			// 		agent = new WormAgent(
-			// 			cellinformation.centerX,
-			// 			cellinformation.centerY,
-			// 			startX,
-			// 			startY,
-			// 			this.angle,
-			// 			options.moveSpeed,
-			// 			cellinformation.tileWidth,
-			// 			cellinformation.tileHeight,
-			// 			cellinformation.radius);
-			// 	}
-			// }
 
 			// check for borders and update all neighborcells
 			// top border

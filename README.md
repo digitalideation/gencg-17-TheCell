@@ -37,4 +37,6 @@ All the info regarding the class as well as direct links to all materials (slide
 **[https://digitalideation.github.io/BA_222_GENCG_H1701/](https://digitalideation.github.io/BA_222_GENCG_H1701/)**
 
 This Repo is hosted under:
+**[https://thecell.github.io/gencg-17-TheCell/](https://thecell.github.io/gencg-17-TheCell/)**
+or
 **[https://digitalideation.github.io/gencg-17-TheCell/](https://digitalideation.github.io/gencg-17-TheCell/)**
