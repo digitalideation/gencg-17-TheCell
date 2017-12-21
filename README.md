@@ -38,3 +38,5 @@ All the info regarding the class as well as direct links to all materials (slide
 
 This Repo is hosted under:
 **[https://thecell.github.io/gencg-17-TheCell/](https://thecell.github.io/gencg-17-TheCell/)**
+or
+**[https://digitalideation.github.io/gencg-17-TheCell/](https://digitalideation.github.io/gencg-17-TheCell/)**
